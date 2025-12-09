@@ -4,8 +4,8 @@
 DROP TABLE IF EXISTS sc_user CASCADE;
 
 CREATE TABLE sc_user (
-    user_uuid VARCHAR(32) NOT NULL,
-    user_role_uuid VARCHAR(32) NOT NULL,
+                         user_uuid      VARCHAR(64) NOT NULL,
+                         user_role_uuid VARCHAR(64) NOT NULL,
     user_name VARCHAR(32) NOT NULL,
     user_email VARCHAR NOT NULL,
     user_phone_num VARCHAR(32) NOT NULL,

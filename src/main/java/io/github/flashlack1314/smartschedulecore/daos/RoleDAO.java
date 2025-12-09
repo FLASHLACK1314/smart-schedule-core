@@ -1,5 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.daos;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,6 +25,23 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class RoleDAO extends ServiceImpl<RoleMapper, RoleDO> {
+
+    /**
+     * 初始化默认管理员角色
+     * 如果管理员角色已存在则不会重复创建
+     *
+     * @return 是否成功创建（已存在返回false）
+     */
+    public boolean initAdminRole() {
+        // 创建管理员角色
+        RoleDO adminRole = new RoleDO();
+        adminRole.setRoleUuid(IdUtil.simpleUUID());
+        adminRole.setRoleName("管理员");
+        adminRole.setRoleNameEn("admin");
+        adminRole.setRolePermissions("{\"permissions\": [\"super_admin\"], \"description\": \"超级管理员权限\"}");
+
+        return this.save(adminRole);
+    }
 
     /**
      * 根据角色名称查询角色

@@ -1,18 +1,20 @@
 package io.github.flashlack1314.smartschedulecore.config;
 
 import io.github.flashlack1314.smartschedulecore.exceptions.DatabaseInitializationException;
-import lombok.RequiredArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +26,7 @@ import java.util.List;
 
 /**
  * 数据库初始化配置类
- * 系统启动时检查表结构是否完整，按顺序检查：core_role -> core_user
+ * 系统启动时检查表结构是否完整，按顺序检查：sc_role -> sc_user
  *
  * @author flash
  */
@@ -36,6 +38,7 @@ public class DatabaseInitializationConfig {
 
     private final JdbcTemplate jdbcTemplate;
     private final DatabaseInitProperties properties;
+    private final BasicDataInitializer basicDataInitializer;
 
     /**
      * 数据库初始化配置属性
@@ -71,6 +74,7 @@ public class DatabaseInitializationConfig {
     }
 
     @Bean
+    @Order(1) // 唯一的数据库初始化Bean
     public ApplicationRunner databaseInitializer() {
         return args -> {
             // 检查是否启用数据库初始化
@@ -83,29 +87,35 @@ public class DatabaseInitializationConfig {
 
             try {
                 // 检查表是否完整
-                List<String> missingTables = checkTables();
+                List<String> missingTables = this.checkTables();
 
-                if (missingTables.isEmpty() && !properties.isDropAndCreate()) {
-                    log.info("数据库表结构检查通过，所有必需的表都存在");
+                // 场景1: 配置强制重建 - 删除所有表，重新创建，初始化数据
+                if (properties.isDropAndCreate()) {
+                    log.warn("强制重新创建模式：将删除所有表后重新创建并初始化数据");
+                    dropAllTables();
+                    createAllTables();
+                    basicDataInitializer.initializeBasicData();
+                    log.info("强制重新创建模式完成");
                     return;
                 }
 
-                if (properties.isDropAndCreate()) {
-                    log.warn("强制重新创建模式：将重新创建所有表");
+                // 场景2: 表都存在 - 不做任何操作
+                if (missingTables.isEmpty()) {
+                    log.info("数据库表结构检查通过，所有必需的表都存在，跳过初始化");
+                    return;
+                }
+
+                // 场景3: 表不完整 - 创建缺失的表并初始化数据
+                log.warn("发现缺失的表: {}，将创建并初始化数据", missingTables);
+                if (properties.isDropAllOnMissing()) {
+                    log.warn("drop-all-on-missing模式：删除所有表后重新创建");
                     dropAllTables();
                     createAllTables();
                 } else {
-                    if (properties.isDropAllOnMissing()) {
-                        log.warn("发现缺失的表 {}，将删除所有表后重新创建", missingTables);
-                        dropAllTables();
-                        createAllTables();
-                    } else {
-                        log.warn("发现缺失的表: {}", missingTables);
-                        createMissingTables(missingTables);
-                    }
+                    createMissingTables(missingTables);
                 }
-
-                log.info("数据库表结构初始化完成");
+                basicDataInitializer.initializeBasicData();
+                log.info("表结构修复和数据初始化完成");
 
             } catch (DatabaseInitializationException e) {
                 // 数据库初始化异常直接抛出
@@ -120,7 +130,7 @@ public class DatabaseInitializationConfig {
     /**
      * 检查必需的表是否存在
      */
-    private List<String> checkTables() throws Exception {
+    private @NotNull List<String> checkTables() throws Exception {
         List<String> missingTables = new ArrayList<>();
 
         if (jdbcTemplate.getDataSource() != null) {

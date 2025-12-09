@@ -39,7 +39,7 @@ public class RoleDO {
     private String roleNameEn;
 
     /**
-     * 角色权限，JSON 格式
+     * 角色权限，文本格式
      */
     private String rolePermissions;
 }
