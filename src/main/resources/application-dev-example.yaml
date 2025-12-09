@@ -1,0 +1,30 @@
+# 开发环境配置
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/smart-schedule-core
+    username: smart-schedule-core
+    password: 123456
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+
+# 日志配置
+logging:
+  level:
+    # 项目包级别设置为DEBUG
+    io.github.flashlack1314.smartschedulecore: DEBUG
+    # MyBatis Plus Mapper级别
+    io.github.flashlack1314.smartschedulecore.mappers: INFO
+    # 工具类包级别
+    io.github.flashlack1314.smartschedulecore.utils: DEBUG
+    # Spring框架相关
+    org.springframework: INFO
+    # 数据库相关
+    org.springframework.jdbc: DEBUG
+    com.baomidou.mybatisplus: DEBUG
