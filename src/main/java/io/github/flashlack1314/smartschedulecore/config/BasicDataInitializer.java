@@ -26,10 +26,10 @@ public class BasicDataInitializer {
         log.debug("开始执行基础数据初始化...");
 
         try {
-            // 初始化管理员角色
-            initializeAdminRole();
+            // 执行管理员角色初始化
+            algorithm.executeAdminRoleInitialization();
 
-            // 未来可以在这里添加其他初始化数据
+            // 未来可以在这里添加其他初始化步骤
             // 例如：
             // - 初始化默认用户
             // - 初始化系统配置
@@ -39,25 +39,6 @@ public class BasicDataInitializer {
         } catch (Exception e) {
             log.error("初始化基础数据失败", e);
             throw new DatabaseInitializationException("初始化基础数据失败: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * 初始化管理员角色
-     */
-    private void initializeAdminRole() {
-        log.debug("开始初始化管理员角色...");
-
-        try {
-            boolean adminRoleCreated = algorithm.executeAdminRoleInitialization();
-            if (adminRoleCreated) {
-                log.info("成功创建管理员角色");
-            } else {
-                log.debug("管理员角色已存在，跳过创建");
-            }
-        } catch (Exception e) {
-            log.error("初始化管理员角色失败", e);
-            throw new DatabaseInitializationException("初始化管理员角色失败: " + e.getMessage(), e);
         }
     }
 }
