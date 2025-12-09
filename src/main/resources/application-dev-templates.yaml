@@ -14,6 +14,25 @@ spring:
       host: localhost
       port: 6379
 
+# 应用配置
+app:
+  database:
+    init:
+      # 是否启用数据库初始化（开发环境可以开启）
+      enabled: true
+      # 是否强制重新创建表（生产环境请勿开启）
+      drop-and-create: false
+      # 是否在发现缺失表时删除所有表重建（确保表结构一致）
+      drop-all-on-missing: true
+      # 需要检查的表，按依赖关系顺序排列
+      tables:
+        - sc_role
+        - sc_user
+      # 对应的SQL文件路径，与表的顺序一一对应
+      sql-files:
+        - sql/sc_role.sql
+        - sql/sc_user.sql
+
 # 日志配置
 logging:
   level:
