@@ -90,6 +90,7 @@ Thumbs.db
 application-dev.properties
 application-test.properties
 application-prod.properties
+application-dev.yaml
 dump.rdb
 node_modules/
 .npm/
