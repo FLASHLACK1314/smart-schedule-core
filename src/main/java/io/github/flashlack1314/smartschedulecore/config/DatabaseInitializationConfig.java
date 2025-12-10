@@ -1,6 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.config;
 
-import io.github.flashlack1314.smartschedulecore.exceptions.DatabaseInitializationException;
+import io.github.flashlack1314.smartschedulecore.exceptions.dataBase.DatabaseInitializationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

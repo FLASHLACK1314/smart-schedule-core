@@ -1,4 +1,4 @@
-package io.github.flashlack1314.smartschedulecore.exceptions;
+package io.github.flashlack1314.smartschedulecore.exceptions.dataBase;
 
 /**
  * 数据库初始化异常
