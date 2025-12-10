@@ -24,16 +24,9 @@ public class BasicDataInitializer {
      */
     public void initializeBasicData() {
         log.debug("开始执行基础数据初始化...");
-
         try {
-            // 执行管理员角色初始化
-            algorithm.executeAdminRoleInitialization();
-
-            // 未来可以在这里添加其他初始化步骤
-            // 例如：
-            // - 初始化默认用户
-            // - 初始化系统配置
-            // - 初始化权限数据等
+            // 角色初始化
+            algorithm.executeRoleInitialization();
 
             log.debug("基础数据初始化逻辑执行完成");
         } catch (Exception e) {

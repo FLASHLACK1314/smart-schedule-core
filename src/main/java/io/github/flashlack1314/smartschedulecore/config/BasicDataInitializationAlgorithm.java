@@ -20,11 +20,12 @@ public class BasicDataInitializationAlgorithm {
 
 
     /**
-     * 执行管理员角色初始化
+     * 执行角色初始化
      */
-    public void executeAdminRoleInitialization() {
+    public void executeRoleInitialization() {
         // 执行管理员角色创建
-        roleDAO.initAdminRole();
+        roleDAO.initAllBasicRoles();
     }
+
 
 }

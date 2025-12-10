@@ -28,19 +28,61 @@ public class RoleDAO extends ServiceImpl<RoleMapper, RoleDO> {
 
     /**
      * 初始化默认管理员角色
-     * 如果管理员角色已存在则不会重复创建
-     *
-     * @return 是否成功创建（已存在返回false）
      */
-    public boolean initAdminRole() {
-        // 创建管理员角色
+    public void initAdminRole() {
         RoleDO adminRole = new RoleDO();
-        adminRole.setRoleUuid(IdUtil.simpleUUID());
-        adminRole.setRoleName("管理员");
-        adminRole.setRoleNameEn("admin");
-        adminRole.setRolePermissions("{\"permissions\": [\"super_admin\"], \"description\": \"超级管理员权限\"}");
+        adminRole.setRoleUuid(IdUtil.simpleUUID())
+                .setRoleName("管理员")
+                .setRoleNameEn("admin")
+                .setRolePermissions("超级管理员权限");
+        this.save(adminRole);
+    }
 
-        return this.save(adminRole);
+    /**
+     * 初始化默认学生角色
+     */
+    public void initStudentRole() {
+        RoleDO studentRole = new RoleDO();
+        studentRole.setRoleUuid(IdUtil.simpleUUID())
+                .setRoleName("学生")
+                .setRoleNameEn("student")
+                .setRolePermissions("学生权限");
+        this.save(studentRole);
+    }
+
+    /**
+     * 初始化默认教师角色
+     */
+    public void initTeacherRole() {
+        RoleDO teacherRole = new RoleDO();
+        teacherRole.setRoleUuid(IdUtil.simpleUUID())
+                .setRoleName("教师")
+                .setRoleNameEn("teacher")
+                .setRolePermissions("教师权限");
+        this.save(teacherRole);
+    }
+
+    /**
+     * 初始化默认教务处老师角色
+     */
+    public void initAcademicOfficeRole() {
+        RoleDO academicAffairsRole = new RoleDO();
+        academicAffairsRole.setRoleUuid(IdUtil.simpleUUID())
+                .setRoleName("教务处老师")
+                .setRoleNameEn("academic")
+                .setRolePermissions("教务处权限");
+        this.save(academicAffairsRole);
+    }
+
+    /**
+     * 初始化所有基础角色
+     * 依次创建管理员、教师、学生、教务处老师角色
+     */
+    public void initAllBasicRoles() {
+        initAdminRole();
+        initTeacherRole();
+        initStudentRole();
+        initAcademicOfficeRole();
     }
 
     /**
@@ -103,4 +145,5 @@ public class RoleDAO extends ServiceImpl<RoleMapper, RoleDO> {
         wrapper.eq(RoleDO::getRoleName, roleName);
         return this.count(wrapper) > 0;
     }
+
 }
