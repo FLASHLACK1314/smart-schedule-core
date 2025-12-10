@@ -131,15 +131,13 @@ class SystemConstantInitializationConfigTest {
 
     @Test
     @DisplayName("数据库异常处理")
-    void testSystemConstantInitialization_DatabaseException() throws Exception {
+    void testSystemConstantInitialization_DatabaseException() {
         // 模拟数据库查询抛出异常
         when(roleDAO.selectByRoleNameEn("admin"))
                 .thenThrow(new RuntimeException("数据库连接失败"));
 
         // 执行初始化并验证异常不会向上传播
-        assertDoesNotThrow(() -> {
-            applicationRunner.run(mock(ApplicationArguments.class));
-        });
+        assertDoesNotThrow(() -> applicationRunner.run(mock(ApplicationArguments.class)));
 
         // 验证系统常量保持null状态
         assertNull(SystemConstant.getRoleAdmin());

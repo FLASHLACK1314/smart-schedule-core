@@ -132,9 +132,7 @@ class BasicDataInitializationAlgorithmTest {
                 .thenThrow(new RuntimeException("数据库连接失败"));
 
         // 执行用户初始化并验证异常向上传播
-        assertThrows(RuntimeException.class, () -> {
-            algorithm.executeUserInitialization();
-        });
+        assertThrows(RuntimeException.class, () -> algorithm.executeUserInitialization());
 
         // 验证用户初始化方法不会被调用（因为异常导致提前终止）
         verify(userDAO, never()).initAllDefaultUsers(anyString(), anyString(), anyString(), anyString());
@@ -154,9 +152,7 @@ class BasicDataInitializationAlgorithmTest {
                 .when(userDAO).initAllDefaultUsers(anyString(), anyString(), anyString(), anyString());
 
         // 执行用户初始化并验证异常向上传播
-        assertThrows(RuntimeException.class, () -> {
-            algorithm.executeUserInitialization();
-        });
+        assertThrows(RuntimeException.class, () -> algorithm.executeUserInitialization());
     }
 
     /**

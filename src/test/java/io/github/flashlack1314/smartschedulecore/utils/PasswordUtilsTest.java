@@ -42,19 +42,13 @@ class PasswordUtilsTest {
     @DisplayName("密码加密异常测试 - 空密码")
     void testEncryptWithEmptyPassword() {
         // 测试null密码
-        assertThrows(IllegalArgumentException.class, () -> {
-            PasswordUtils.encrypt(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> PasswordUtils.encrypt(null));
 
         // 测试空字符串密码
-        assertThrows(IllegalArgumentException.class, () -> {
-            PasswordUtils.encrypt("");
-        });
+        assertThrows(IllegalArgumentException.class, () -> PasswordUtils.encrypt(""));
 
         // 测试只包含空格的密码
-        assertThrows(IllegalArgumentException.class, () -> {
-            PasswordUtils.encrypt("   ");
-        });
+        assertThrows(IllegalArgumentException.class, () -> PasswordUtils.encrypt("   "));
     }
 
     @Test
