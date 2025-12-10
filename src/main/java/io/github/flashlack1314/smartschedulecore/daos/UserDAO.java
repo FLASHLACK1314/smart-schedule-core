@@ -134,6 +134,7 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
                 .setUserRoleUuid(roleUuid)
                 .setUserName("管理员")
                 .setUserEmail("admin@flashlack.cn")
+                .setUserPhoneNum("13800138000")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(adminUser);
     }
@@ -147,6 +148,7 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
                 .setUserRoleUuid(roleUuid)
                 .setUserName("教师")
                 .setUserEmail("teacher@flashlack.cn")
+                .setUserPhoneNum("13800138001")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(teacherUser);
     }
@@ -160,6 +162,7 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
                 .setUserRoleUuid(roleUuid)
                 .setUserName("学生")
                 .setUserEmail("student@flashlack.cn")
+                .setUserPhoneNum("13800138002")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(studentUser);
     }
@@ -173,6 +176,7 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
                 .setUserRoleUuid(roleUuid)
                 .setUserName("教务处老师")
                 .setUserEmail("academic@flashlack.cn")
+                .setUserPhoneNum("13800138003")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(academicUser);
     }
