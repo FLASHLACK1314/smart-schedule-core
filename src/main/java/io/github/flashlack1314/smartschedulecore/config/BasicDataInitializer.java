@@ -28,6 +28,9 @@ public class BasicDataInitializer {
             // 角色初始化
             algorithm.executeRoleInitialization();
 
+            // 用户初始化
+            algorithm.executeUserInitialization();
+
             log.debug("基础数据初始化逻辑执行完成");
         } catch (Exception e) {
             log.error("初始化基础数据失败", e);

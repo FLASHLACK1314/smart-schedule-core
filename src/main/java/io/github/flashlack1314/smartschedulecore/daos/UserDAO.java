@@ -1,11 +1,12 @@
 package io.github.flashlack1314.smartschedulecore.daos;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.flashlack1314.smartschedulecore.mappers.UserMapper;
 import io.github.flashlack1314.smartschedulecore.models.entity.UserDO;
-import lombok.RequiredArgsConstructor;
+import io.github.flashlack1314.smartschedulecore.utils.PasswordUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,7 +23,6 @@ import java.util.List;
  * @since v1.0.0
  */
 @Repository
-@RequiredArgsConstructor
 public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
 
     /**
@@ -123,5 +123,69 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
         LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserDO::getUserPhoneNum, userPhoneNum);
         return this.count(wrapper) > 0;
+    }
+
+    /**
+     * 初始化默认管理员用户
+     */
+    public void initAdminUser(String roleUuid) {
+        UserDO adminUser = new UserDO();
+        adminUser.setUserUuid(IdUtil.simpleUUID())
+                .setUserRoleUuid(roleUuid)
+                .setUserName("管理员")
+                .setUserEmail("admin@flashlack.cn")
+                .setUserPassword(PasswordUtils.encrypt("123456"));
+        this.save(adminUser);
+    }
+
+    /**
+     * 初始化默认教师用户
+     */
+    public void initTeacherUser(String roleUuid) {
+        UserDO teacherUser = new UserDO();
+        teacherUser.setUserUuid(IdUtil.simpleUUID())
+                .setUserRoleUuid(roleUuid)
+                .setUserName("教师")
+                .setUserEmail("teacher@flashlack.cn")
+                .setUserPassword(PasswordUtils.encrypt("123456"));
+        this.save(teacherUser);
+    }
+
+    /**
+     * 初始化默认学生用户
+     */
+    public void initStudentUser(String roleUuid) {
+        UserDO studentUser = new UserDO();
+        studentUser.setUserUuid(IdUtil.simpleUUID())
+                .setUserRoleUuid(roleUuid)
+                .setUserName("学生")
+                .setUserEmail("student@flashlack.cn")
+                .setUserPassword(PasswordUtils.encrypt("123456"));
+        this.save(studentUser);
+    }
+
+    /**
+     * 初始化默认教务处用户
+     */
+    public void initAcademicUser(String roleUuid) {
+        UserDO academicUser = new UserDO();
+        academicUser.setUserUuid(IdUtil.simpleUUID())
+                .setUserRoleUuid(roleUuid)
+                .setUserName("教务处老师")
+                .setUserEmail("academic@flashlack.cn")
+                .setUserPassword(PasswordUtils.encrypt("123456"));
+        this.save(academicUser);
+    }
+
+    /**
+     * 初始化所有默认用户
+     * 依次创建管理员、教师、学生、教务处用户
+     */
+    public void initAllDefaultUsers(String adminRoleUuid, String teacherRoleUuid,
+                                    String studentRoleUuid, String academicRoleUuid) {
+        initAdminUser(adminRoleUuid);
+        initTeacherUser(teacherRoleUuid);
+        initStudentUser(studentRoleUuid);
+        initAcademicUser(academicRoleUuid);
     }
 }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.flashlack1314.smartschedulecore.mappers.RoleMapper;
 import io.github.flashlack1314.smartschedulecore.models.entity.RoleDO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.List;
  * @since v1.0.0
  */
 @Repository
-@RequiredArgsConstructor
 public class RoleDAO extends ServiceImpl<RoleMapper, RoleDO> {
 
     /**
