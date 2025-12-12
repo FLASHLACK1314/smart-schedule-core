@@ -74,9 +74,21 @@ public class AuthServiceLogic implements AuthService {
         userDAO.save(user);
         log.info("用户注册成功: uuid={}, email={}, role={}",
                 user.getUserUuid(), registerVO.getUserEmail(), registerVO.getRoleNameEn());
-        // 7. 构建返回对象
+        // 7. 生成token
+        String token = TokenUtils.generateToken(user.getUserUuid());
+        // 8. 构建用户信息对象
+        RegisterBackDTO.UserInfo userInfo = RegisterBackDTO.UserInfo.builder()
+                .userUuid(user.getUserUuid())
+                .userName(user.getUserName())
+                .userEmail(user.getUserEmail())
+                .userPhoneNum(user.getUserPhoneNum())
+                .roleName(role.getRoleName())
+                .roleNameEn(role.getRoleNameEn())
+                .build();
+        // 9. 构建返回对象
         RegisterBackDTO result = new RegisterBackDTO();
-        result.setToken(TokenUtils.generateToken(user.getUserUuid()));
+        result.setToken(token);
+        result.setUserInfo(userInfo);
         return result;
     }
 }
