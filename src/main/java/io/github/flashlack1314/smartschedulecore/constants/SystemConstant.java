@@ -87,4 +87,27 @@ public class SystemConstant {
             throw new UnsupportedOperationException("Utility class");
         }
     }
+
+    /**
+     * 学校相关常量
+     */
+    public static class School {
+        /**
+         * 默认学校UUID
+         */
+        @Getter
+        @Setter
+        private static String defaultUuid;
+
+        /**
+         * 默认学校名称
+         */
+        @Getter
+        @Setter
+        private static String defaultName;
+
+        private School() {
+            throw new UnsupportedOperationException("Utility class");
+        }
+    }
 }

@@ -25,6 +25,9 @@ public class BasicDataInitializer {
     public void initializeBasicData() {
         log.debug("开始执行基础数据初始化...");
         try {
+            // 学校初始化（必须在角色和用户之前）
+            algorithm.executeSchoolInitialization();
+
             // 角色初始化
             algorithm.executeRoleInitialization();
 

@@ -34,9 +34,19 @@ public class UserDO {
     private String userRoleUuid;
 
     /**
+     * 用户学校 UUID（关联 sc_school 表）
+     */
+    private String userSchoolUuid;
+
+    /**
      * 用户姓名
      */
     private String userName;
+
+    /**
+     * 学号/工号
+     */
+    private String userStudentId;
 
     /**
      * 用户邮箱地址
