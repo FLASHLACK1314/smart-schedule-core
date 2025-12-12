@@ -1,4 +1,4 @@
--- SC User Table
+-- SC Regexp Table
 -- 用户表：存储系统中用户的基本信息
 
 DROP TABLE IF EXISTS sc_user CASCADE;

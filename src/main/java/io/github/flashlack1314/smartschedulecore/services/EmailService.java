@@ -14,9 +14,8 @@ public interface EmailService {
      * 发送验证码邮件（HTML格式）
      *
      * @param toEmail 收件人邮箱
-     * @return 生成的验证码
      */
-    String sendVerificationCodeHtml(String toEmail);
+    void sendVerificationCodeHtml(String toEmail);
 
     /**
      * 验证验证码

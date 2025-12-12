@@ -51,36 +51,44 @@ public class SystemConstantInitializationConfig {
             // 通过英文名称查询管理员角色
             RoleDO adminRole = roleDAO.selectByRoleNameEn("admin");
             if (adminRole != null) {
-                SystemConstant.setRoleAdmin(adminRole.getRoleUuid());
-                log.debug("管理员角色常量已初始化: {}", adminRole.getRoleUuid());
+                SystemConstant.Role.setAdminNameEn(adminRole.getRoleNameEn());
+                SystemConstant.Role.setAdminUuid(adminRole.getRoleUuid());
+                log.debug("管理员角色常量已初始化 - 英文名: {}, UUID: {}",
+                        adminRole.getRoleNameEn(), adminRole.getRoleUuid());
             }
 
             // 通过英文名称查询教师角色
             RoleDO teacherRole = roleDAO.selectByRoleNameEn("teacher");
             if (teacherRole != null) {
-                SystemConstant.setRoleTeacher(teacherRole.getRoleUuid());
-                log.debug("教师角色常量已初始化: {}", teacherRole.getRoleUuid());
+                SystemConstant.Role.setTeacherNameEn(teacherRole.getRoleNameEn());
+                SystemConstant.Role.setTeacherUuid(teacherRole.getRoleUuid());
+                log.debug("教师角色常量已初始化 - 英文名: {}, UUID: {}",
+                        teacherRole.getRoleNameEn(), teacherRole.getRoleUuid());
             }
 
             // 通过英文名称查询学生角色
             RoleDO studentRole = roleDAO.selectByRoleNameEn("student");
             if (studentRole != null) {
-                SystemConstant.setRoleStudent(studentRole.getRoleUuid());
-                log.debug("学生角色常量已初始化: {}", studentRole.getRoleUuid());
+                SystemConstant.Role.setStudentNameEn(studentRole.getRoleNameEn());
+                SystemConstant.Role.setStudentUuid(studentRole.getRoleUuid());
+                log.debug("学生角色常量已初始化 - 英文名: {}, UUID: {}",
+                        studentRole.getRoleNameEn(), studentRole.getRoleUuid());
             }
 
             // 通过英文名称查询教务处角色
             RoleDO academicRole = roleDAO.selectByRoleNameEn("academic");
             if (academicRole != null) {
-                SystemConstant.setRoleAcademic(academicRole.getRoleUuid());
-                log.debug("教务处角色常量已初始化: {}", academicRole.getRoleUuid());
+                SystemConstant.Role.setAcademicNameEn(academicRole.getRoleNameEn());
+                SystemConstant.Role.setAcademicUuid(academicRole.getRoleUuid());
+                log.debug("教务处角色常量已初始化 - 英文名: {}, UUID: {}",
+                        academicRole.getRoleNameEn(), academicRole.getRoleUuid());
             }
 
-            log.info("系统常量初始化完成 - 管理员: {}, 教师: {}, 学生: {}, 教务处: {}",
-                    SystemConstant.getRoleAdmin(),
-                    SystemConstant.getRoleTeacher(),
-                    SystemConstant.getRoleStudent(),
-                    SystemConstant.getRoleAcademic());
+            log.info("系统常量初始化完成 - 管理员[{}/{}], 教师[{}/{}], 学生[{}/{}], 教务处[{}/{}]",
+                    SystemConstant.Role.getAdminNameEn(), SystemConstant.Role.getAdminUuid(),
+                    SystemConstant.Role.getTeacherNameEn(), SystemConstant.Role.getTeacherUuid(),
+                    SystemConstant.Role.getStudentNameEn(), SystemConstant.Role.getStudentUuid(),
+                    SystemConstant.Role.getAcademicNameEn(), SystemConstant.Role.getAcademicUuid());
 
         } catch (Exception e) {
             log.error("系统常量初始化过程中发生异常", e);

@@ -1,8 +1,8 @@
 package io.github.flashlack1314.smartschedulecore.utils;
 
 import cn.hutool.core.util.RandomUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,12 @@ import java.time.Duration;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class VerificationCodeUtils {
+
+    /**
+     * 验证码重发间隔（秒）
+     */
+    private static final long RESEND_INTERVAL_SECONDS = 60;
 
     /**
      * 验证码长度
@@ -33,7 +37,7 @@ public class VerificationCodeUtils {
      * Redis key前缀
      */
     private static final String REDIS_KEY_PREFIX = "email:verification:";
-    private final RedisTemplate<String, Object> redisTemplate;
+    private static RedisTemplate<String, Object> staticRedisTemplate;
 
     /**
      * 生成6位数字验证码
@@ -41,7 +45,7 @@ public class VerificationCodeUtils {
      *
      * @return 6位数字验证码字符串
      */
-    public String generateCode() {
+    public static String generateCode() {
         String verificationCode = RandomUtil.randomNumbers(CODE_LENGTH);
         log.debug("生成验证码: {}", verificationCode);
         return verificationCode;
@@ -53,10 +57,62 @@ public class VerificationCodeUtils {
      * @param email 邮箱地址
      * @param code  验证码
      */
-    public void saveCode(String email, String code) {
+    public static void saveCode(String email, String code) {
         String key = REDIS_KEY_PREFIX + email;
-        redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(CODE_EXPIRE_MINUTES));
+        staticRedisTemplate.opsForValue().set(key, code, Duration.ofMinutes(CODE_EXPIRE_MINUTES));
         log.info("验证码已保存到Redis, email: {}, 有效期: {}分钟", email, CODE_EXPIRE_MINUTES);
+    }
+
+    /**
+     * 检查是否可以发送验证码
+     * 规则：距离上次发送必须超过1分钟
+     *
+     * @param email 邮箱地址
+     * @return true-可以发送，false-不能发送（1分钟内已发送过）
+     */
+    public static boolean canSendCode(String email) {
+        String key = REDIS_KEY_PREFIX + email;
+        long expireTime = staticRedisTemplate.getExpire(key);
+
+        // 如果key不存在（expireTime为-2）或已过期，可以发送
+        if (expireTime < 0) {
+            log.debug("验证码不存在或已过期，可以发送: email={}", email);
+            return true;
+        }
+
+        // 计算距离上次发送的时间
+        long timeSinceLastSend = (CODE_EXPIRE_MINUTES * 60) - expireTime;
+
+        // 如果距离上次发送超过60秒，可以发送
+        boolean canSend = timeSinceLastSend >= RESEND_INTERVAL_SECONDS;
+        log.debug("检查是否可以发送验证码: email={}, 距上次发送={}秒, 可发送={}",
+                email, timeSinceLastSend, canSend);
+
+        return canSend;
+    }
+
+    /**
+     * 获取验证码重发剩余冷却时间（秒）
+     *
+     * @param email 邮箱地址
+     * @return 剩余冷却时间（秒），0表示可以立即发送
+     */
+    public static long getRemainingCooldown(String email) {
+        String key = REDIS_KEY_PREFIX + email;
+        long expireTime = staticRedisTemplate.getExpire(key);
+
+        // 如果key不存在或已过期，可以立即发送
+        if (expireTime < 0) {
+            return 0;
+        }
+
+        // 计算距离上次发送的时间
+        long timeSinceLastSend = (CODE_EXPIRE_MINUTES * 60) - expireTime;
+
+        // 计算剩余冷却时间
+        long remainingCooldown = RESEND_INTERVAL_SECONDS - timeSinceLastSend;
+
+        return Math.max(0, remainingCooldown);
     }
 
     /**
@@ -66,14 +122,14 @@ public class VerificationCodeUtils {
      * @param inputCode 用户输入的验证码
      * @return true-验证成功，false-验证失败
      */
-    public boolean verifyCode(String email, String inputCode) {
+    public static boolean verifyCode(String email, String inputCode) {
         if (email == null || inputCode == null) {
             log.warn("验证码验证失败: 邮箱或验证码为空");
             return false;
         }
 
         String key = REDIS_KEY_PREFIX + email;
-        Object storedCode = redisTemplate.opsForValue().get(key);
+        Object storedCode = staticRedisTemplate.opsForValue().get(key);
 
         if (storedCode == null) {
             log.warn("验证码验证失败: 验证码不存在或已过期, email: {}", email);
@@ -97,9 +153,9 @@ public class VerificationCodeUtils {
      *
      * @param email 邮箱地址
      */
-    public void removeCode(String email) {
+    public static void removeCode(String email) {
         String key = REDIS_KEY_PREFIX + email;
-        redisTemplate.delete(key);
+        staticRedisTemplate.delete(key);
         log.debug("验证码已删除, email: {}", email);
     }
 
@@ -109,9 +165,9 @@ public class VerificationCodeUtils {
      * @param email 邮箱地址
      * @return true-存在，false-不存在
      */
-    public boolean isCodeExists(String email) {
+    public static boolean isCodeExists(String email) {
         String key = REDIS_KEY_PREFIX + email;
-        return redisTemplate.hasKey(key);
+        return staticRedisTemplate.hasKey(key);
     }
 
     /**
@@ -120,8 +176,16 @@ public class VerificationCodeUtils {
      * @param email 邮箱地址
      * @return 剩余有效时间（秒），如果不存在则返回-1
      */
-    public long getCodeExpireTime(String email) {
+    public static long getCodeExpireTime(String email) {
         String key = REDIS_KEY_PREFIX + email;
-        return redisTemplate.getExpire(key);
+        return staticRedisTemplate.getExpire(key);
+    }
+
+    /**
+     * 通过setter注入RedisTemplate并赋值给静态字段
+     */
+    @Autowired
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+        staticRedisTemplate = redisTemplate;
     }
 }

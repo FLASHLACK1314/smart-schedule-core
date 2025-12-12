@@ -43,7 +43,10 @@ public enum ErrorCode {
     USER_DISABLED("UserDisabled", 1002, "用户已被禁用"),
     PASSWORD_ERROR("PasswordError", 1003, "密码错误"),
     EMAIL_ALREADY_EXISTS("EmailAlreadyExists", 1004, "邮箱已存在"),
-    PHONE_ALREADY_EXISTS("PhoneAlreadyExists", 1005, "手机号已存在");
+    PHONE_ALREADY_EXISTS("PhoneAlreadyExists", 1005, "手机号已存在"),
+
+    // 数据库相关 5100-5199
+    DATABASE_ERROR("DatabaseError", 5100, "数据库操作失败");
 
     // 课程相关 2001-2999
 

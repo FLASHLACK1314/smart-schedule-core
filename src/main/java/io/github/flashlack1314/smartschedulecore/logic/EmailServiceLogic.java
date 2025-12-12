@@ -27,7 +27,6 @@ import org.thymeleaf.context.Context;
 public class EmailServiceLogic implements EmailService {
 
     private final JavaMailSender mailSender;
-    private final VerificationCodeUtils verificationCodeUtils;
     private final TemplateEngine templateEngine;
 
     /**
@@ -41,23 +40,32 @@ public class EmailServiceLogic implements EmailService {
      * 使用Thymeleaf模板引擎渲染邮件内容
      *
      * @param toEmail 收件人邮箱
-     * @return 生成的验证码
      */
     @Override
-    public String sendVerificationCodeHtml(String toEmail) {
+    public void sendVerificationCodeHtml(String toEmail) {
         try {
-            // 1. 生成验证码
-            String code = verificationCodeUtils.generateCode();
+            // 1. 检查是否可以发送验证码（防止1分钟内重复发送）
+            if (!VerificationCodeUtils.canSendCode(toEmail)) {
+                long remainingSeconds = VerificationCodeUtils.getRemainingCooldown(toEmail);
+                log.warn("验证码发送失败: 距离上次发送不足1分钟, toEmail: {}, 剩余冷却时间: {}秒",
+                        toEmail, remainingSeconds);
+                throw new RuntimeException(
+                        String.format("验证码发送过于频繁，请%d秒后再试", remainingSeconds)
+                );
+            }
 
-            // 2. 保存到Redis
-            verificationCodeUtils.saveCode(toEmail, code);
+            // 2. 生成验证码
+            String code = VerificationCodeUtils.generateCode();
 
-            // 3. 使用Thymeleaf渲染HTML模板
+            // 3. 保存到Redis
+            VerificationCodeUtils.saveCode(toEmail, code);
+
+            // 4. 使用Thymeleaf渲染HTML模板
             Context context = new Context();
             context.setVariable("code", code);
             String htmlContent = templateEngine.process("email-verification-code", context);
 
-            // 4. 创建邮件消息
+            // 5. 创建邮件消息
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setFrom(fromEmail);
@@ -65,11 +73,10 @@ public class EmailServiceLogic implements EmailService {
             helper.setSubject("【智能排程系统】邮箱验证码");
             helper.setText(htmlContent, true);
 
-            // 5. 发送邮件
+            // 6. 发送邮件
             mailSender.send(message);
             log.info("验证码邮件发送成功, toEmail: {}", toEmail);
 
-            return code;
         } catch (MessagingException e) {
             log.error("验证码邮件发送失败, toEmail: {}, error: {}", toEmail, e.getMessage(), e);
             throw new RuntimeException("邮件发送失败: " + e.getMessage(), e);
@@ -85,6 +92,6 @@ public class EmailServiceLogic implements EmailService {
      */
     @Override
     public boolean verifyCode(String email, String code) {
-        return verificationCodeUtils.verifyCode(email, code);
+        return VerificationCodeUtils.verifyCode(email, code);
     }
 }
