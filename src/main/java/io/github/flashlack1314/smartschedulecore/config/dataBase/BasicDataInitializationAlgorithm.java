@@ -101,7 +101,6 @@ public class BasicDataInitializationAlgorithm {
             users.add(createUser(
                     "admin@flashlack.cn",
                     "系统管理员",
-                    "123456",
                     adminRole.getRoleUuid(),
                     defaultSchoolUuid
             ));
@@ -112,7 +111,6 @@ public class BasicDataInitializationAlgorithm {
             users.add(createUser(
                     "teacher@flashlack.cn",
                     "演示教师",
-                    "123456",
                     teacherRole.getRoleUuid(),
                     defaultSchoolUuid
             ));
@@ -123,7 +121,6 @@ public class BasicDataInitializationAlgorithm {
             users.add(createUser(
                     "student@flashlack.cn",
                     "演示学生",
-                    "123456",
                     studentRole.getRoleUuid(),
                     defaultSchoolUuid
             ));
@@ -134,7 +131,6 @@ public class BasicDataInitializationAlgorithm {
             users.add(createUser(
                     "academic@flashlack.cn",
                     "演示教务",
-                    "123456",
                     academicRole.getRoleUuid(),
                     defaultSchoolUuid
             ));
@@ -154,12 +150,11 @@ public class BasicDataInitializationAlgorithm {
      *
      * @param userEmail  用户邮箱
      * @param userName   用户姓名
-     * @param password   密码
      * @param roleUuid   角色UUID
      * @param schoolUuid 学校UUID
      * @return 用户对象
      */
-    private UserDO createUser(String userEmail, String userName, String password,
+    private UserDO createUser(String userEmail, String userName,
                               String roleUuid, String schoolUuid) {
         String studentId = generateStudentId(userEmail);
 
@@ -167,7 +162,7 @@ public class BasicDataInitializationAlgorithm {
                 .setUserUuid(IdUtil.simpleUUID())
                 .setUserEmail(userEmail)
                 .setUserName(userName)
-                .setUserPassword(PasswordUtils.encrypt(password))
+                .setUserPassword(PasswordUtils.encrypt("qwer1234"))
                 .setUserRoleUuid(roleUuid)
                 .setUserSchoolUuid(schoolUuid)
                 .setUserStudentId(studentId)
