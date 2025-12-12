@@ -2,8 +2,9 @@ package io.github.flashlack1314.smartschedulecore.utils;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
-import lombok.RequiredArgsConstructor;
+import io.github.flashlack1314.smartschedulecore.constants.StringConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class TokenUtils {
 
     /**
@@ -29,11 +29,7 @@ public class TokenUtils {
      * 每个用户最多允许的token数量
      */
     private static final int MAX_TOKEN_COUNT = 2;
-    /**
-     * Redis Key前缀
-     */
-    private static final String REDIS_KEY_PREFIX = "user:token:";
-    private static final RedisTemplate<String, Object> REDIS_TEMPLATE = new RedisTemplate<>();
+    private static RedisTemplate<String, Object> REDIS_TEMPLATE;
 
     /**
      * 生成用户token
@@ -65,7 +61,7 @@ public class TokenUtils {
      * @param token    token字符串
      */
     private static void saveToken(String userUuid, String token) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         // 1. 获取当前用户的所有token
         Set<Object> tokens = REDIS_TEMPLATE.opsForSet().members(redisKey);
@@ -96,7 +92,7 @@ public class TokenUtils {
      * @return true-有效，false-无效
      */
     public boolean verifyToken(String userUuid, String token) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         // 检查token是否存在于用户的token集合中
         Boolean isMember = REDIS_TEMPLATE.opsForSet().isMember(redisKey, token);
@@ -114,7 +110,7 @@ public class TokenUtils {
      * @return true-刷新成功，false-刷新失败
      */
     public boolean refreshToken(String userUuid) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         // 检查key是否存在
         Boolean exists = REDIS_TEMPLATE.hasKey(redisKey);
@@ -138,7 +134,7 @@ public class TokenUtils {
      * @return true-删除成功，false-删除失败
      */
     public boolean removeToken(String userUuid, String token) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         Long removed = REDIS_TEMPLATE.opsForSet().remove(redisKey, token);
         boolean success = removed != null && removed > 0;
@@ -154,7 +150,7 @@ public class TokenUtils {
      * @return true-删除成功，false-删除失败
      */
     public boolean removeAllTokens(String userUuid) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         boolean success = REDIS_TEMPLATE.delete(redisKey);
 
@@ -169,7 +165,7 @@ public class TokenUtils {
      * @return token集合
      */
     public Set<Object> getUserTokens(String userUuid) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
         Set<Object> tokens = REDIS_TEMPLATE.opsForSet().members(redisKey);
 
         log.debug("获取用户所有token: userUuid={}, count={}",
@@ -184,7 +180,7 @@ public class TokenUtils {
      * @return token数量
      */
     public long getTokenCount(String userUuid) {
-        String redisKey = REDIS_KEY_PREFIX + userUuid;
+        String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
         Long count = REDIS_TEMPLATE.opsForSet().size(redisKey);
 
         long tokenCount = count != null ? count : 0;
@@ -200,5 +196,16 @@ public class TokenUtils {
      */
     public boolean isUserLoggedIn(String userUuid) {
         return getTokenCount(userUuid) > 0;
+    }
+
+    /**
+     * 通过setter注入RedisTemplate并赋值给静态字段
+     * 这是让静态工具类能够使用Spring Bean的标准模式
+     *
+     * @param redisTemplate Spring配置的RedisTemplate
+     */
+    @Autowired
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+        REDIS_TEMPLATE = redisTemplate;
     }
 }

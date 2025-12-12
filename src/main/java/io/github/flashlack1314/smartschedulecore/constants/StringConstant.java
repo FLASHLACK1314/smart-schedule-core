@@ -1,10 +1,7 @@
 package io.github.flashlack1314.smartschedulecore.constants;
 
 /**
- * 正则表达式常量
- * <p>
- * 使用内部静态类分类管理正则表达式模式
- * </p>
+ * 字符串常量
  *
  * @author flash
  */
@@ -51,6 +48,29 @@ public class StringConstant {
         public static final String VERIFICATION_CODE = "^\\d{6}$";
 
         private Regexp() {
+            throw new UnsupportedOperationException("Utility class");
+        }
+    }
+
+    /**
+     * Redis Key 常量
+     */
+    public static class Redis {
+        /**
+         * Redis Key 前缀：邮件验证码
+         * <p>完整格式：email:verification:{email}</p>
+         * <p>示例：email:verification:user@example.com</p>
+         */
+        public static final String EMAIL_VERIFICATION_PREFIX = "email:verification:";
+
+        /**
+         * Redis Key 前缀：用户Token
+         * <p>完整格式：user:token:{userUuid}</p>
+         * <p>示例：user:token:550e8400-e29b-41d4-a716-446655440000</p>
+         */
+        public static final String USER_TOKEN_PREFIX = "user:token:";
+
+        private Redis() {
             throw new UnsupportedOperationException("Utility class");
         }
     }

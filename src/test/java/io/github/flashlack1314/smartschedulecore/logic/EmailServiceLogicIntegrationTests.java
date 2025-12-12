@@ -1,5 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.logic;
 
+import io.github.flashlack1314.smartschedulecore.constants.StringConstant;
 import io.github.flashlack1314.smartschedulecore.services.EmailService;
 import io.github.flashlack1314.smartschedulecore.utils.VerificationCodeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ class EmailServiceLogicIntegrationTests {
     void cleanUp() {
         log.info("开始清理测试数据，共 {} 个邮箱", testEmails.size());
         for (String email : testEmails) {
-            String redisKey = "email:verification:" + email;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + email;
             Boolean deleted = redisTemplate.delete(redisKey);
             log.info("清理 Redis key: {}, 结果: {}", redisKey, deleted);
         }
@@ -63,7 +64,7 @@ class EmailServiceLogicIntegrationTests {
             emailService.sendVerificationCodeHtml(testEmail);
 
             // Then: 验证 Redis 中存在验证码
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             assertTrue(redisTemplate.hasKey(redisKey), "Redis 中应该存在验证码");
 
             // 验证验证码格式（6位数字）
@@ -99,7 +100,7 @@ class EmailServiceLogicIntegrationTests {
             log.info("冷却时间限制验证成功: {}", exception.getMessage());
 
             // 验证 Redis 中仍然存在验证码
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             assertTrue(redisTemplate.hasKey(redisKey), "冷却期间 Redis 中应该仍存在验证码");
 
         } catch (Exception e) {
@@ -128,7 +129,7 @@ class EmailServiceLogicIntegrationTests {
             assertTrue(result, "正确的验证码应该验证成功");
 
             // 验证成功后，Redis 中的验证码应该被自动删除
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             assertFalse(redisTemplate.hasKey(redisKey), "验证成功后 Redis 中的验证码应该被删除");
             log.info("验证码验证成功，Redis 中的验证码已自动删除");
 
@@ -159,7 +160,7 @@ class EmailServiceLogicIntegrationTests {
             assertFalse(result, "错误的验证码应该验证失败");
 
             // 验证失败后，Redis 中的验证码应该仍然存在
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             assertTrue(redisTemplate.hasKey(redisKey), "验证失败后 Redis 中的验证码应该仍然存在");
             log.info("验证码验证失败（预期行为），Redis 中的验证码保留");
 
@@ -183,7 +184,7 @@ class EmailServiceLogicIntegrationTests {
             log.info("验证码已保存到 Redis: email={}, code={}", testEmail, testCode);
 
             // 手动删除 Redis 中的验证码（模拟过期）
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             redisTemplate.delete(redisKey);
             log.info("模拟验证码过期，已删除 Redis key: {}", redisKey);
 
@@ -212,7 +213,7 @@ class EmailServiceLogicIntegrationTests {
             emailService.sendVerificationCodeHtml(testEmail);
 
             // Then: 检查 Redis TTL
-            String redisKey = "email:verification:" + testEmail;
+            String redisKey = StringConstant.Redis.EMAIL_VERIFICATION_PREFIX + testEmail;
             Long ttl = redisTemplate.getExpire(redisKey);
             assertNotNull(ttl, "TTL 不应为 null");
             assertTrue(ttl > 0 && ttl <= 300, "TTL 应该在 0-300 秒之间（5分钟），实际: " + ttl + "秒");
