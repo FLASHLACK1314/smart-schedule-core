@@ -1,4 +1,4 @@
-package io.github.flashlack1314.smartschedulecore.config;
+package io.github.flashlack1314.smartschedulecore.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

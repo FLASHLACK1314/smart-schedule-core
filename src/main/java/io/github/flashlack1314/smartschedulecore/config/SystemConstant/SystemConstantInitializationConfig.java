@@ -1,4 +1,4 @@
-package io.github.flashlack1314.smartschedulecore.config;
+package io.github.flashlack1314.smartschedulecore.config.SystemConstant;
 
 import io.github.flashlack1314.smartschedulecore.constants.SystemConstant;
 import io.github.flashlack1314.smartschedulecore.daos.RoleDAO;

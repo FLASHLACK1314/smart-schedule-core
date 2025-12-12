@@ -1,5 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.config;
 
+import io.github.flashlack1314.smartschedulecore.config.dataBase.BasicDataInitializationAlgorithm;
 import io.github.flashlack1314.smartschedulecore.daos.RoleDAO;
 import io.github.flashlack1314.smartschedulecore.daos.UserDAO;
 import io.github.flashlack1314.smartschedulecore.models.entity.RoleDO;

@@ -1,4 +1,4 @@
-package io.github.flashlack1314.smartschedulecore.config;
+package io.github.flashlack1314.smartschedulecore.config.dataBase;
 
 import io.github.flashlack1314.smartschedulecore.exceptions.dataBase.DatabaseInitializationException;
 import lombok.RequiredArgsConstructor;
