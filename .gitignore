@@ -98,3 +98,8 @@ node_modules/
 ### Claude Code ###
 CLAUDE.md
 /.claude/settings.local.json
+
+### Windows Device Name Issue ###
+# Windows系统中"nul"是设备名，某些情况下可能被错误创建为文件
+nul
+NUL
