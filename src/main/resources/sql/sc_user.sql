@@ -8,7 +8,6 @@ CREATE TABLE sc_user (
                          user_role_uuid   VARCHAR(64)  NOT NULL,
                          user_school_uuid VARCHAR(64)  NOT NULL,
     user_name VARCHAR(32) NOT NULL,
-                         user_student_id  VARCHAR(32),
                          user_email       VARCHAR(64)  NOT NULL,
     user_phone_num VARCHAR(32) NOT NULL,
                          user_password    VARCHAR(255) NOT NULL,
@@ -21,14 +20,12 @@ COMMENT ON COLUMN sc_user.user_uuid IS '用户唯一标识符';
 COMMENT ON COLUMN sc_user.user_role_uuid IS '用户角色唯一标识符（关联sc_role表）';
 COMMENT ON COLUMN sc_user.user_school_uuid IS '学校唯一标识符（关联sc_school表）';
 COMMENT ON COLUMN sc_user.user_name IS '用户姓名';
-COMMENT ON COLUMN sc_user.user_student_id IS '学号/工号';
 COMMENT ON COLUMN sc_user.user_email IS '用户邮箱地址';
 COMMENT ON COLUMN sc_user.user_phone_num IS '用户手机号码';
 COMMENT ON COLUMN sc_user.user_password IS '用户密码（加密存储）';
 
 -- Index for performance
 CREATE INDEX idx_user_school ON sc_user (user_school_uuid);
-CREATE UNIQUE INDEX idx_user_student_school ON sc_user (user_student_id, user_school_uuid) WHERE user_student_id IS NOT NULL;
 
 -- Foreign Key Constraints
 -- 注意：由于表创建顺序，外键约束可能需要在数据迁移时添加

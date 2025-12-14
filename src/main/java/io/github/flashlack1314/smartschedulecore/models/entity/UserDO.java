@@ -44,11 +44,6 @@ public class UserDO {
     private String userName;
 
     /**
-     * 学号/工号
-     */
-    private String userStudentId;
-
-    /**
      * 用户邮箱地址
      */
     private String userEmail;

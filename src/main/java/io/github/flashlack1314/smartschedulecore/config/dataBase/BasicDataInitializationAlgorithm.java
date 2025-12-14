@@ -156,8 +156,6 @@ public class BasicDataInitializationAlgorithm {
      */
     private UserDO createUser(String userEmail, String userName,
                               String roleUuid, String schoolUuid) {
-        String studentId = generateStudentId(userEmail);
-
         return new UserDO()
                 .setUserUuid(IdUtil.simpleUUID())
                 .setUserEmail(userEmail)
@@ -165,19 +163,6 @@ public class BasicDataInitializationAlgorithm {
                 .setUserPassword(PasswordUtils.encrypt("qwer1234"))
                 .setUserRoleUuid(roleUuid)
                 .setUserSchoolUuid(schoolUuid)
-                .setUserStudentId(studentId)
                 .setUserPhoneNum("13800138000");
-    }
-
-    /**
-     * 根据邮箱生成学号/工号
-     *
-     * @param email 用户邮箱
-     * @return 生成的学号/工号
-     */
-    private String generateStudentId(String email) {
-        // 简单的学号生成规则：邮箱前缀 + 随机数字
-        String prefix = email.split("@")[0];
-        return prefix + String.format("%04d", (int) (Math.random() * 10000));
     }
 }
