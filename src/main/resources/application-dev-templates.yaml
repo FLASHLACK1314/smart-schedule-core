@@ -18,7 +18,6 @@ spring:
     password:
     host:
     port: 25
-# 应用配置
 app:
   database:
     init:
@@ -28,14 +27,78 @@ app:
       drop-and-create: false
       # 是否在发现缺失表时删除所有表重建（确保表结构一致）
       drop-all-on-missing: true
-      # 需要检查的表，按依赖关系顺序排列
+      # 需要检查的表，按依赖关系顺序排列（8层依赖结构）
       tables:
+        # Layer 1: 基础表
         - sc_role
+        - sc_school
+        # Layer 2: 字典表和组织架构基础表
+        - sc_department
+        - sc_campus
+        - sc_course_category
+        - sc_course_property
+        - sc_course_type
+        - sc_course_nature
+        - sc_credit_hour_type
+        - sc_classroom_type
+        - sc_teacher_type
+        - sc_grade
+        - sc_semester
+        # Layer 3: 依赖Layer 2的表
         - sc_user
+        - sc_major
+        - sc_building
+        # Layer 4: 依赖Layer 3的表
+        - sc_teacher
+        - sc_classroom
+        # Layer 5: 依赖Layer 4的表
+        - sc_administrative_class
+        - sc_course
+        - sc_teacher_preferences
+        # Layer 6: 依赖Layer 5的表
+        - sc_student
+        - sc_teaching_class
+        - sc_teacher_course_qualification
+        # Layer 7: 排课核心表
+        - sc_class_assignment
+        # Layer 8: 排课冲突表
+        - sc_scheduling_conflict
       # 对应的SQL文件路径，与表的顺序一一对应
       sql-files:
+        # Layer 1
         - sql/sc_role.sql
+        - sql/sc_school.sql
+        # Layer 2
+        - sql/sc_department.sql
+        - sql/sc_campus.sql
+        - sql/sc_course_category.sql
+        - sql/sc_course_property.sql
+        - sql/sc_course_type.sql
+        - sql/sc_course_nature.sql
+        - sql/sc_credit_hour_type.sql
+        - sql/sc_classroom_type.sql
+        - sql/sc_teacher_type.sql
+        - sql/sc_grade.sql
+        - sql/sc_semester.sql
+        # Layer 3
         - sql/sc_user.sql
+        - sql/sc_major.sql
+        - sql/sc_building.sql
+        # Layer 4
+        - sql/sc_teacher.sql
+        - sql/sc_classroom.sql
+        # Layer 5
+        - sql/sc_administrative_class.sql
+        - sql/sc_course.sql
+        - sql/sc_teacher_preferences.sql
+        # Layer 6
+        - sql/sc_student.sql
+        - sql/sc_teaching_class.sql
+        - sql/sc_teacher_course_qualification.sql
+        # Layer 7
+        - sql/sc_class_assignment.sql
+        # Layer 8
+        - sql/sc_scheduling_conflict.sql
 
 # 日志配置
 logging:
