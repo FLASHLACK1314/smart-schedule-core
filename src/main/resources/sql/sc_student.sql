@@ -10,7 +10,7 @@ CREATE TABLE sc_student
     administrative_class_uuid VARCHAR(64),
     student_code              VARCHAR(32) NOT NULL,
     student_name              VARCHAR(32) NOT NULL,
-    gender                    BOOLEAN     NOT NULL DEFAULT TRUE,
+    gender VARCHAR(4) DEFAULT '男',
     is_graduated              BOOLEAN              DEFAULT FALSE,
     created_at                TIMESTAMP            DEFAULT CURRENT_TIMESTAMP,
     updated_at                TIMESTAMP            DEFAULT CURRENT_TIMESTAMP
@@ -39,5 +39,5 @@ COMMENT ON COLUMN sc_student.grade_uuid IS '年级';
 COMMENT ON COLUMN sc_student.administrative_class_uuid IS '所属行政班';
 COMMENT ON COLUMN sc_student.student_code IS '学号（唯一）';
 COMMENT ON COLUMN sc_student.student_name IS '学生姓名';
-COMMENT ON COLUMN sc_student.gender IS '性别(false:女 true:男)';
+COMMENT ON COLUMN sc_student.gender IS '性别(男/女)';
 COMMENT ON COLUMN sc_student.is_graduated IS '是否毕业';

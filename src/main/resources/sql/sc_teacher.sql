@@ -9,7 +9,7 @@ CREATE TABLE sc_teacher
     teacher_code         VARCHAR(32) NOT NULL,
     teacher_name         VARCHAR(32) NOT NULL,
     teacher_english_name VARCHAR(128),
-    gender               BOOLEAN     NOT NULL DEFAULT TRUE,
+    gender VARCHAR(4) DEFAULT '男',
     job_title            VARCHAR(32),
     phone                VARCHAR(16),
     email                VARCHAR(64),
@@ -37,7 +37,7 @@ COMMENT ON COLUMN sc_teacher.teacher_type_uuid IS '教师类型';
 COMMENT ON COLUMN sc_teacher.teacher_code IS '教师工号（唯一）';
 COMMENT ON COLUMN sc_teacher.teacher_name IS '教师姓名';
 COMMENT ON COLUMN sc_teacher.teacher_english_name IS '教师英文名';
-COMMENT ON COLUMN sc_teacher.gender IS '性别(false:女 true:男)';
+COMMENT ON COLUMN sc_teacher.gender IS '性别(男/女)';
 COMMENT ON COLUMN sc_teacher.job_title IS '职称';
 COMMENT ON COLUMN sc_teacher.phone IS '教师电话';
 COMMENT ON COLUMN sc_teacher.email IS '教师邮箱';

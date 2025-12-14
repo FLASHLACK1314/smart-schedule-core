@@ -231,15 +231,25 @@ public class DatabaseInitializationConfig {
             new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)
         );
 
+        // 先移除所有注释行，再分割SQL语句
+        StringBuilder cleanedSql = new StringBuilder();
+        for (String line : sqlContent.split("\n")) {
+            String trimmedLine = line.trim();
+            // 跳过纯注释行
+            if (!trimmedLine.startsWith("--")) {
+                cleanedSql.append(line).append("\n");
+            }
+        }
+
         // 分割SQL语句（以分号结尾）
-        String[] sqlStatements = sqlContent.split(";");
+        String[] sqlStatements = cleanedSql.toString().split(";");
 
         int statementCount = 0;
         for (String sql : sqlStatements) {
             sql = sql.trim();
 
-            // 跳过空行和注释
-            if (sql.isEmpty() || sql.startsWith("--")) {
+            // 跳过空语句
+            if (sql.isEmpty()) {
                 continue;
             }
 

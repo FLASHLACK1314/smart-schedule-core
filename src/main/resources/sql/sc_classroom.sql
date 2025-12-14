@@ -8,7 +8,7 @@ CREATE TABLE sc_classroom
     classroom_type_uuid        VARCHAR(64) NOT NULL,
     classroom_number           VARCHAR(32) NOT NULL,
     classroom_name             VARCHAR(64) NOT NULL,
-    floor                      VARCHAR(4)  NOT NULL,
+    floor INT NOT NULL DEFAULT 1,
     capacity                   INT         NOT NULL DEFAULT 0,
     examination_capacity       INT,
     area                       DECIMAL(10, 2),
