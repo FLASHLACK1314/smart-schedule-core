@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  * 院系/部门表实体类
  * <p>
  * 对应数据库表：`sc_department`
- * 支持树形结构（通过 parentDepartmentUuid 自引用）
  * </p>
  *
  * @author flash
@@ -56,11 +55,6 @@ public class DepartmentDO {
     private String departmentShortName;
 
     /**
-     * 上级部门UUID（支持树形结构）
-     */
-    private String parentDepartmentUuid;
-
-    /**
      * 是否开课院系
      */
     private Boolean isTeachingDepartment;
@@ -69,11 +63,6 @@ public class DepartmentDO {
      * 是否启用
      */
     private Boolean isEnabled;
-
-    /**
-     * 排序
-     */
-    private Integer departmentOrder;
 
     /**
      * 创建时间

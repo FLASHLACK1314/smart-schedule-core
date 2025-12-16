@@ -118,28 +118,23 @@ Smart Schedule Core 是一个基于AI的智慧排课系统，旨在解决高校�
 
 **表路径**: [resources/sql/sc_department.sql](resources/sql/sc_department.sql)
 
-| 字段名                     | 类型           | 约束                       | 说明               |
-|-------------------------|--------------|--------------------------|------------------|
-| department_uuid         | VARCHAR(64)  | PRIMARY KEY              | 部门主键             |
-| school_uuid             | VARCHAR(64)  | FK → sc_school, NOT NULL | 关联学校             |
-| department_code         | VARCHAR(32)  | UNIQUE NOT NULL          | 部门编码             |
-| department_name         | VARCHAR(64)  | NOT NULL                 | 部门名称             |
-| department_english_name | VARCHAR(128) | NULL                     | 部门英文名称           |
-| department_short_name   | VARCHAR(32)  | NULL                     | 部门简称             |
-| parent_department_uuid  | VARCHAR(64)  | FK → sc_department       | 上级部门(自引用，支持树形结构) |
-| is_teaching_department  | BOOLEAN      | DEFAULT TRUE             | 是否开课院系           |
-| is_enabled              | BOOLEAN      | DEFAULT TRUE             | 是否启用             |
-| department_order        | INT          | DEFAULT 100              | 部门排序             |
-| created_at              | TIMESTAMP    | NOT NULL                 | 创建时间             |
-| updated_at              | TIMESTAMP    | NOT NULL                 | 更新时间             |
+| 字段名                     | 类型           | 约束                       | 说明     |
+|-------------------------|--------------|--------------------------|--------|
+| department_uuid         | VARCHAR(32)  | PRIMARY KEY              | 部门主键   |
+| school_uuid             | VARCHAR(32)  | FK → sc_school, NOT NULL | 关联学校   |
+| department_code         | VARCHAR(32)  | UNIQUE NOT NULL          | 部门编码   |
+| department_name         | VARCHAR(64)  | NOT NULL                 | 部门名称   |
+| department_english_name | VARCHAR(128) | NULL                     | 部门英文名称 |
+| department_short_name   | VARCHAR(32)  | NULL                     | 部门简称   |
+| is_teaching_department  | BOOLEAN      | DEFAULT TRUE             | 是否开课院系 |
+| is_enabled              | BOOLEAN      | DEFAULT TRUE             | 是否启用   |
+| created_at              | TIMESTAMP    | NOT NULL                 | 创建时间   |
+| updated_at              | TIMESTAMP    | NOT NULL                 | 更新时间   |
 
 **索引**:
 
 - `uk_department_code`: 部门编码唯一索引
-- `idx_department_parent`: 上级部门索引
 - `idx_department_school`: 学校索引
-
-**特点**: 支持树形结构（通过 parent_department_uuid 自引用）
 
 ---
 

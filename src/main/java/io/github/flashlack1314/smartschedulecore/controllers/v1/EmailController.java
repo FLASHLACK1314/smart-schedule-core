@@ -1,6 +1,5 @@
 package io.github.flashlack1314.smartschedulecore.controllers.v1;
 
-import io.github.flashlack1314.smartschedulecore.models.dto.RegisterBackDTO;
 import io.github.flashlack1314.smartschedulecore.models.vo.ResultVO;
 import io.github.flashlack1314.smartschedulecore.services.EmailService;
 import jakarta.validation.Valid;
@@ -21,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping("/sendEamil")
-    public ResultVO<RegisterBackDTO> register(
+    @PostMapping("/sendEmail")
+    public ResultVO<Void> sendVerificationCode(
             @Valid @RequestParam String email
     ) {
         emailService.sendVerificationCodeHtml(email);
