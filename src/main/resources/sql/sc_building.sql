@@ -1,9 +1,9 @@
 -- 教学楼表
 CREATE TABLE sc_building
 (
-    building_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid   VARCHAR(64) NOT NULL,
-    campus_uuid   VARCHAR(64) NOT NULL,
+    building_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid   VARCHAR(32) NOT NULL,
+    campus_uuid   VARCHAR(32) NOT NULL,
     building_name VARCHAR(64) NOT NULL,
     building_code VARCHAR(32) NOT NULL,
     floor_count   SMALLINT    NOT NULL DEFAULT 1,

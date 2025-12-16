@@ -1,16 +1,16 @@
 -- 行政班表
 CREATE TABLE sc_administrative_class
 (
-    administrative_class_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid               VARCHAR(64) NOT NULL,
-    department_uuid           VARCHAR(64) NOT NULL,
-    major_uuid                VARCHAR(64) NOT NULL,
-    grade_uuid                VARCHAR(64) NOT NULL,
+    administrative_class_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid               VARCHAR(32) NOT NULL,
+    department_uuid           VARCHAR(32) NOT NULL,
+    major_uuid                VARCHAR(32) NOT NULL,
+    grade_uuid                VARCHAR(32) NOT NULL,
     class_code                VARCHAR(32) NOT NULL,
     class_name                VARCHAR(64) NOT NULL,
     student_count             INT       DEFAULT 0,
-    counselor_uuid            VARCHAR(64),
-    monitor_uuid              VARCHAR(64),
+    counselor_uuid            VARCHAR(32),
+    monitor_uuid              VARCHAR(32),
     is_enabled                BOOLEAN   DEFAULT TRUE,
     created_at                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at                TIMESTAMP DEFAULT CURRENT_TIMESTAMP

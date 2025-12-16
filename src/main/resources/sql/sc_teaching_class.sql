@@ -1,11 +1,11 @@
 -- 教学班表
 CREATE TABLE sc_teaching_class
 (
-    teaching_class_uuid    VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid            VARCHAR(64) NOT NULL,
-    semester_uuid          VARCHAR(64) NOT NULL,
-    course_uuid            VARCHAR(64) NOT NULL,
-    department_uuid        VARCHAR(64) NOT NULL,
+    teaching_class_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid         VARCHAR(32) NOT NULL,
+    semester_uuid       VARCHAR(32) NOT NULL,
+    course_uuid         VARCHAR(32) NOT NULL,
+    department_uuid     VARCHAR(32) NOT NULL,
     teaching_class_code    VARCHAR(32) NOT NULL,
     teaching_class_name    VARCHAR(64) NOT NULL,
     administrative_classes JSONB       NOT NULL,

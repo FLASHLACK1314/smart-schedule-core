@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS sc_role CASCADE;
 
 CREATE TABLE sc_role (
-                         role_uuid        VARCHAR(64) NOT NULL,
+                         role_uuid VARCHAR(32) NOT NULL,
     role_name VARCHAR(32) NOT NULL,
     role_name_en VARCHAR(32),
                          role_permissions VARCHAR(1000),

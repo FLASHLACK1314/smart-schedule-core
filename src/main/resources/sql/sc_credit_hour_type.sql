@@ -1,8 +1,8 @@
 -- 学时类型表
 CREATE TABLE sc_credit_hour_type
 (
-    credit_hour_type_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid           VARCHAR(64) NOT NULL,
+    credit_hour_type_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid           VARCHAR(32) NOT NULL,
     type_name             VARCHAR(32) NOT NULL,
     type_code             VARCHAR(32) NOT NULL,
     created_at            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

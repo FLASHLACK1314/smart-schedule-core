@@ -1,8 +1,8 @@
 -- 教室类型表
 CREATE TABLE sc_classroom_type
 (
-    classroom_type_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid         VARCHAR(64) NOT NULL,
+    classroom_type_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid         VARCHAR(32) NOT NULL,
     type_name           VARCHAR(32) NOT NULL,
     type_code           VARCHAR(32) NOT NULL,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

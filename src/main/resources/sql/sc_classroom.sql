@@ -1,11 +1,11 @@
 -- 教室表
 CREATE TABLE sc_classroom
 (
-    classroom_uuid             VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid                VARCHAR(64) NOT NULL,
-    campus_uuid                VARCHAR(64) NOT NULL,
-    building_uuid              VARCHAR(64) NOT NULL,
-    classroom_type_uuid        VARCHAR(64) NOT NULL,
+    classroom_uuid             VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid                VARCHAR(32) NOT NULL,
+    campus_uuid                VARCHAR(32) NOT NULL,
+    building_uuid              VARCHAR(32) NOT NULL,
+    classroom_type_uuid        VARCHAR(32) NOT NULL,
     classroom_number           VARCHAR(32) NOT NULL,
     classroom_name             VARCHAR(64) NOT NULL,
     floor INT NOT NULL DEFAULT 1,
@@ -16,7 +16,7 @@ CREATE TABLE sc_classroom
     is_multimedia              BOOLEAN              DEFAULT FALSE,
     is_air_conditioned         BOOLEAN              DEFAULT FALSE,
     is_examination_room        BOOLEAN              DEFAULT FALSE,
-    management_department_uuid VARCHAR(64),
+    management_department_uuid VARCHAR(32),
     is_enabled                 BOOLEAN              DEFAULT TRUE,
     created_at                 TIMESTAMP            DEFAULT CURRENT_TIMESTAMP,
     updated_at                 TIMESTAMP            DEFAULT CURRENT_TIMESTAMP

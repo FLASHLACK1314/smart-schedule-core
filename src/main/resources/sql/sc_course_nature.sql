@@ -1,8 +1,8 @@
 -- 课程性质表
 CREATE TABLE sc_course_nature
 (
-    course_nature_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid        VARCHAR(64) NOT NULL,
+    course_nature_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid        VARCHAR(32) NOT NULL,
     nature_name        VARCHAR(32) NOT NULL,
     nature_code        VARCHAR(32) NOT NULL,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

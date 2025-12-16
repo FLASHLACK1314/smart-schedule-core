@@ -1,13 +1,13 @@
 -- 教师偏好表
 CREATE TABLE sc_teacher_preferences
 (
-    preference_uuid               VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid                   VARCHAR(64) NOT NULL,
-    teacher_uuid                  VARCHAR(64) NOT NULL,
+    preference_uuid               VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid                   VARCHAR(32) NOT NULL,
+    teacher_uuid                  VARCHAR(32) NOT NULL,
     preferred_time                JSONB,
     avoided_time                  JSONB,
-    preferred_campus_uuid         VARCHAR(64),
-    preferred_classroom_type_uuid VARCHAR(64),
+    preferred_campus_uuid         VARCHAR(32),
+    preferred_classroom_type_uuid VARCHAR(32),
     max_courses_per_day           SMALLINT,
     max_consecutive_courses       SMALLINT,
     created_at                    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

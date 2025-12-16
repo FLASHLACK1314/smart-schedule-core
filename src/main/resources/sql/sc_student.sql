@@ -1,13 +1,13 @@
 -- 学生表
 CREATE TABLE sc_student
 (
-    student_uuid              VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid               VARCHAR(64) NOT NULL,
-    user_uuid                 VARCHAR(64),
-    department_uuid           VARCHAR(64) NOT NULL,
-    major_uuid                VARCHAR(64) NOT NULL,
-    grade_uuid                VARCHAR(64) NOT NULL,
-    administrative_class_uuid VARCHAR(64),
+    student_uuid              VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid               VARCHAR(32) NOT NULL,
+    user_uuid                 VARCHAR(32),
+    department_uuid           VARCHAR(32) NOT NULL,
+    major_uuid                VARCHAR(32) NOT NULL,
+    grade_uuid                VARCHAR(32) NOT NULL,
+    administrative_class_uuid VARCHAR(32),
     student_code              VARCHAR(32) NOT NULL,
     student_name              VARCHAR(32) NOT NULL,
     gender VARCHAR(4) DEFAULT '男',

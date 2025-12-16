@@ -996,7 +996,7 @@ sc_teacher (教师)
 
 #### 3. 默认用户（密码：qwer1234）
 
-- **管理员**: admin@flashlack.cn
+- **管理员**: flashlack1314@163.com
 - **教师**: teacher@flashlack.cn
 - **学生**: student@flashlack.cn
 - **教务处老师**: academic@flashlack.cn

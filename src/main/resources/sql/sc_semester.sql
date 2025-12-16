@@ -1,8 +1,8 @@
 -- 学期表
 CREATE TABLE sc_semester
 (
-    semester_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid   VARCHAR(64) NOT NULL,
+    semester_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid   VARCHAR(32) NOT NULL,
     semester_name VARCHAR(64) NOT NULL,
     start_date    DATE        NOT NULL,
     end_date      DATE        NOT NULL,

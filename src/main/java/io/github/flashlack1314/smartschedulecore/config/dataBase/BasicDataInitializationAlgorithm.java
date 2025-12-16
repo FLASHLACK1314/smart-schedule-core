@@ -99,7 +99,7 @@ public class BasicDataInitializationAlgorithm {
         // 管理员用户
         if (adminRole != null) {
             users.add(createUser(
-                    "admin@flashlack.cn",
+                    "flashlack1314@163.com",
                     "系统管理员",
                     adminRole.getRoleUuid(),
                     defaultSchoolUuid

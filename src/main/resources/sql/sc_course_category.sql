@@ -1,8 +1,8 @@
 -- 课程类别表
 CREATE TABLE sc_course_category
 (
-    course_category_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid          VARCHAR(64) NOT NULL,
+    course_category_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid          VARCHAR(32) NOT NULL,
     category_name        VARCHAR(32) NOT NULL,
     category_code        VARCHAR(32) NOT NULL,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -1,9 +1,9 @@
 -- 专业表
 CREATE TABLE sc_major
 (
-    major_uuid      VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid     VARCHAR(64) NOT NULL,
-    department_uuid VARCHAR(64) NOT NULL,
+    major_uuid      VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid     VARCHAR(32) NOT NULL,
+    department_uuid VARCHAR(32) NOT NULL,
     major_code      VARCHAR(32) NOT NULL,
     major_name      VARCHAR(64) NOT NULL,
     education_years SMALLINT    NOT NULL DEFAULT 4,

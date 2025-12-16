@@ -1,13 +1,13 @@
 -- 院系/部门表
 CREATE TABLE sc_department
 (
-    department_uuid         VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid             VARCHAR(64) NOT NULL,
+    department_uuid        VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid            VARCHAR(32) NOT NULL,
     department_code         VARCHAR(32) NOT NULL,
     department_name         VARCHAR(64) NOT NULL,
     department_english_name VARCHAR(128),
     department_short_name   VARCHAR(32),
-    parent_department_uuid  VARCHAR(64),
+    parent_department_uuid VARCHAR(32),
     is_teaching_department  BOOLEAN   DEFAULT TRUE,
     is_enabled              BOOLEAN   DEFAULT TRUE,
     department_order        INT       DEFAULT 100,

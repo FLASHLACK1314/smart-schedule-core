@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sc_school CASCADE;
 
 CREATE TABLE sc_school
 (
-    school_uuid    VARCHAR(64)        NOT NULL PRIMARY KEY,
+    school_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
     school_name    VARCHAR(128)       NOT NULL,
     school_name_en VARCHAR(128),
     school_code    VARCHAR(32) UNIQUE NOT NULL,

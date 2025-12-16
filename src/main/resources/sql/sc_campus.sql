@@ -1,8 +1,8 @@
 -- 校区表
 CREATE TABLE sc_campus
 (
-    campus_uuid    VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid    VARCHAR(64) NOT NULL,
+    campus_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid VARCHAR(32) NOT NULL,
     campus_name    VARCHAR(64) NOT NULL,
     campus_code    VARCHAR(32) NOT NULL,
     campus_address VARCHAR(256),

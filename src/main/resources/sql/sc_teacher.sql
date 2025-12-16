@@ -1,11 +1,11 @@
 -- 教师表
 CREATE TABLE sc_teacher
 (
-    teacher_uuid         VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid          VARCHAR(64) NOT NULL,
-    user_uuid            VARCHAR(64),
-    department_uuid      VARCHAR(64) NOT NULL,
-    teacher_type_uuid    VARCHAR(64) NOT NULL,
+    teacher_uuid      VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid       VARCHAR(32) NOT NULL,
+    user_uuid         VARCHAR(32),
+    department_uuid   VARCHAR(32) NOT NULL,
+    teacher_type_uuid VARCHAR(32) NOT NULL,
     teacher_code         VARCHAR(32) NOT NULL,
     teacher_name         VARCHAR(32) NOT NULL,
     teacher_english_name VARCHAR(128),

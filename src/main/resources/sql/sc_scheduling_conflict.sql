@@ -1,11 +1,11 @@
 -- 排课冲突表
 CREATE TABLE sc_scheduling_conflict
 (
-    conflict_uuid          VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid            VARCHAR(64) NOT NULL,
-    semester_uuid          VARCHAR(64) NOT NULL,
-    first_assignment_uuid  VARCHAR(64) NOT NULL,
-    second_assignment_uuid VARCHAR(64) NOT NULL,
+    conflict_uuid          VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid            VARCHAR(32) NOT NULL,
+    semester_uuid          VARCHAR(32) NOT NULL,
+    first_assignment_uuid  VARCHAR(32) NOT NULL,
+    second_assignment_uuid VARCHAR(32) NOT NULL,
     conflict_type          SMALLINT    NOT NULL,
     conflict_time          JSONB       NOT NULL,
     description            VARCHAR(255),

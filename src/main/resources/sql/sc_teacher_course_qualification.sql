@@ -1,10 +1,10 @@
 -- 教师课程资格表
 CREATE TABLE sc_teacher_course_qualification
 (
-    qualification_uuid  VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid         VARCHAR(64) NOT NULL,
-    teacher_uuid        VARCHAR(64) NOT NULL,
-    course_uuid         VARCHAR(64) NOT NULL,
+    qualification_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid        VARCHAR(32) NOT NULL,
+    teacher_uuid       VARCHAR(32) NOT NULL,
+    course_uuid        VARCHAR(32) NOT NULL,
     qualification_level SMALLINT    NOT NULL DEFAULT 1,
     is_primary          BOOLEAN              DEFAULT FALSE,
     approval_status     SMALLINT             DEFAULT 0,

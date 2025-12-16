@@ -133,7 +133,7 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
         adminUser.setUserUuid(IdUtil.simpleUUID())
                 .setUserRoleUuid(roleUuid)
                 .setUserName("管理员")
-                .setUserEmail("admin@flashlack.cn")
+                .setUserEmail("flashlack1314@163.com")
                 .setUserPhoneNum("13800138000")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(adminUser);
@@ -179,17 +179,5 @@ public class UserDAO extends ServiceImpl<UserMapper, UserDO> {
                 .setUserPhoneNum("13800138003")
                 .setUserPassword(PasswordUtils.encrypt("123456"));
         this.save(academicUser);
-    }
-
-    /**
-     * 初始化所有默认用户
-     * 依次创建管理员、教师、学生、教务处用户
-     */
-    public void initAllDefaultUsers(String adminRoleUuid, String teacherRoleUuid,
-                                    String studentRoleUuid, String academicRoleUuid) {
-        initAdminUser(adminRoleUuid);
-        initTeacherUser(teacherRoleUuid);
-        initStudentUser(studentRoleUuid);
-        initAcademicUser(academicRoleUuid);
     }
 }

@@ -1,8 +1,8 @@
 -- 课程属性表
 CREATE TABLE sc_course_property
 (
-    course_property_uuid VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid          VARCHAR(64) NOT NULL,
+    course_property_uuid VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid          VARCHAR(32) NOT NULL,
     property_name        VARCHAR(32) NOT NULL,
     property_code        VARCHAR(32) NOT NULL,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

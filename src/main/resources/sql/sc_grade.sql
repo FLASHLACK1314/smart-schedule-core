@@ -1,8 +1,8 @@
 -- 年级表
 CREATE TABLE sc_grade
 (
-    grade_uuid  VARCHAR(64) NOT NULL PRIMARY KEY,
-    school_uuid VARCHAR(64) NOT NULL,
+    grade_uuid  VARCHAR(32) NOT NULL PRIMARY KEY,
+    school_uuid VARCHAR(32) NOT NULL,
     grade_name  VARCHAR(32) NOT NULL,
     start_year  INT         NOT NULL,
     is_enabled  BOOLEAN   DEFAULT TRUE,
