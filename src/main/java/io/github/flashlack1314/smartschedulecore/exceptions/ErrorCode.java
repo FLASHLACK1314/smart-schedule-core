@@ -35,6 +35,8 @@ public enum ErrorCode {
     DATA_EXISTS("DataExists", 5003, "数据已存在"),
     OPERATION_FAILED("OperationFailed", 5004, "操作失败"),
     VALIDATION_FAILED("ValidationFailed", 5005, "验证失败"),
+    EMAIL_SEND_FAILED("EmailSendFailed", 5006, "邮件发送失败"),
+    EMAIL_SEND_TOO_FREQUENT("EmailSendTooFrequent", 5007, "邮件发送过于频繁"),
 
     // ========== 业务相关错误码 ==========
 
@@ -44,6 +46,8 @@ public enum ErrorCode {
     PASSWORD_ERROR("PasswordError", 1003, "密码错误"),
     EMAIL_ALREADY_EXISTS("EmailAlreadyExists", 1004, "邮箱已存在"),
     PHONE_ALREADY_EXISTS("PhoneAlreadyExists", 1005, "手机号已存在"),
+    USER_ROLE_NOT_FOUND("UserRoleNotFound", 1006, "用户角色不存在"),
+    DATA_INCOMPLETE("DataIncomplete", 1007, "数据不完整"),
 
     // 数据库相关 5100-5199
     DATABASE_ERROR("DatabaseError", 5100, "数据库操作失败");

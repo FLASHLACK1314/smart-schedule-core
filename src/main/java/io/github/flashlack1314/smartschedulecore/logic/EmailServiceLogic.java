@@ -1,5 +1,7 @@
 package io.github.flashlack1314.smartschedulecore.logic;
 
+import io.github.flashlack1314.smartschedulecore.exceptions.BusinessException;
+import io.github.flashlack1314.smartschedulecore.exceptions.ErrorCode;
 import io.github.flashlack1314.smartschedulecore.services.EmailService;
 import io.github.flashlack1314.smartschedulecore.utils.VerificationCodeUtils;
 import jakarta.mail.MessagingException;
@@ -49,8 +51,9 @@ public class EmailServiceLogic implements EmailService {
                 long remainingSeconds = VerificationCodeUtils.getRemainingCooldown(toEmail);
                 log.warn("验证码发送失败: 距离上次发送不足1分钟, toEmail: {}, 剩余冷却时间: {}秒",
                         toEmail, remainingSeconds);
-                throw new RuntimeException(
-                        String.format("验证码发送过于频繁，请%d秒后再试", remainingSeconds)
+                throw new BusinessException(
+                        String.format("验证码发送过于频繁，请%d秒后再试", remainingSeconds),
+                        ErrorCode.EMAIL_SEND_TOO_FREQUENT
                 );
             }
 
@@ -79,7 +82,10 @@ public class EmailServiceLogic implements EmailService {
 
         } catch (MessagingException e) {
             log.error("验证码邮件发送失败, toEmail: {}, error: {}", toEmail, e.getMessage(), e);
-            throw new RuntimeException("邮件发送失败: " + e.getMessage(), e);
+            throw new BusinessException(
+                    "邮件发送失败: " + e.getMessage(),
+                    ErrorCode.EMAIL_SEND_FAILED
+            );
         }
     }
 

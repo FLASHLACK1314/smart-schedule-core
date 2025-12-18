@@ -91,7 +91,7 @@ public class TokenUtils {
      * @param token    待验证的token
      * @return true-有效，false-无效
      */
-    public boolean verifyToken(String userUuid, String token) {
+    public static boolean verifyToken(String userUuid, String token) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         // 检查token是否存在于用户的token集合中
@@ -109,7 +109,7 @@ public class TokenUtils {
      * @param userUuid 用户UUID
      * @return true-刷新成功，false-刷新失败
      */
-    public boolean refreshToken(String userUuid) {
+    public static boolean refreshToken(String userUuid) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         // 检查key是否存在
@@ -133,7 +133,7 @@ public class TokenUtils {
      * @param token    待删除的token
      * @return true-删除成功，false-删除失败
      */
-    public boolean removeToken(String userUuid, String token) {
+    public static boolean removeToken(String userUuid, String token) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         Long removed = REDIS_TEMPLATE.opsForSet().remove(redisKey, token);
@@ -149,7 +149,7 @@ public class TokenUtils {
      * @param userUuid 用户UUID
      * @return true-删除成功，false-删除失败
      */
-    public boolean removeAllTokens(String userUuid) {
+    public static boolean removeAllTokens(String userUuid) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
 
         boolean success = REDIS_TEMPLATE.delete(redisKey);
@@ -164,7 +164,7 @@ public class TokenUtils {
      * @param userUuid 用户UUID
      * @return token集合
      */
-    public Set<Object> getUserTokens(String userUuid) {
+    public static Set<Object> getUserTokens(String userUuid) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
         Set<Object> tokens = REDIS_TEMPLATE.opsForSet().members(redisKey);
 
@@ -179,7 +179,7 @@ public class TokenUtils {
      * @param userUuid 用户UUID
      * @return token数量
      */
-    public long getTokenCount(String userUuid) {
+    public static long getTokenCount(String userUuid) {
         String redisKey = StringConstant.Redis.USER_TOKEN_PREFIX + userUuid;
         Long count = REDIS_TEMPLATE.opsForSet().size(redisKey);
 
@@ -194,7 +194,7 @@ public class TokenUtils {
      * @param userUuid 用户UUID
      * @return true-已登录，false-未登录
      */
-    public boolean isUserLoggedIn(String userUuid) {
+    public static boolean isUserLoggedIn(String userUuid) {
         return getTokenCount(userUuid) > 0;
     }
 
