@@ -86,7 +86,6 @@ public class AuthServiceLogic implements AuthService {
     @Override
     public void logout(String userUuid, String token) {
         log.info("开始用户登出: userUuid={}", userUuid);
-
         // 使用兼容性验证方法，确保token有效
         String validatedUserUuid = tokenService.validateTokenCompatible(token, userUuid);
         if (validatedUserUuid != null && validatedUserUuid.equals(userUuid)) {
