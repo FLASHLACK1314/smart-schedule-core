@@ -9,9 +9,9 @@ import io.github.flashlack1314.smartschedulecore.models.entity.RoleDO;
 import io.github.flashlack1314.smartschedulecore.models.entity.UserDO;
 import io.github.flashlack1314.smartschedulecore.models.vo.LoginVO;
 import io.github.flashlack1314.smartschedulecore.services.AuthService;
+import io.github.flashlack1314.smartschedulecore.services.TokenService;
 import io.github.flashlack1314.smartschedulecore.services.UserService;
 import io.github.flashlack1314.smartschedulecore.utils.PasswordUtils;
-import io.github.flashlack1314.smartschedulecore.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,10 +27,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceLogic implements AuthService {
 
-    // 直接注入DAO，不依赖UserService
     private final UserDAO userDAO;
     private final RoleDAO roleDAO;
     private final UserService userService;
+    private final TokenService tokenService;
 
     @Override
     public LoginBackDTO login(LoginVO loginVO) {
@@ -65,7 +65,7 @@ public class AuthServiceLogic implements AuthService {
         }
 
         // 6. 生成Token
-        String token = TokenUtils.generateToken(user.getUserUuid());
+        String token = tokenService.generateToken(user.getUserUuid());
         if (token == null) {
             log.error("登录失败: Token生成失败, userUuid={}, userEmail={}",
                     user.getUserUuid(), loginVO.getUserEmail());
@@ -87,11 +87,17 @@ public class AuthServiceLogic implements AuthService {
     public void logout(String userUuid, String token) {
         log.info("开始用户登出: userUuid={}", userUuid);
 
-        boolean removed = TokenUtils.removeToken(userUuid, token);
-        if (removed) {
-            log.info("用户登出成功: userUuid={}", userUuid);
+        // 使用兼容性验证方法，确保token有效
+        String validatedUserUuid = tokenService.validateTokenCompatible(token, userUuid);
+        if (validatedUserUuid != null && validatedUserUuid.equals(userUuid)) {
+            boolean removed = tokenService.removeAllTokens(userUuid);
+            if (removed) {
+                log.info("用户登出成功: userUuid={}", userUuid);
+            } else {
+                log.warn("用户登出失败: 无需删除的token, userUuid={}", userUuid);
+            }
         } else {
-            log.warn("用户登出失败: Token不存在, userUuid={}", userUuid);
+            log.warn("用户登出失败: Token无效或用户不匹配, userUuid={}, token={}", userUuid, token);
         }
     }
 }

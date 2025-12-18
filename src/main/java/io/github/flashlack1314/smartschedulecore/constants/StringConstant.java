@@ -70,6 +70,20 @@ public class StringConstant {
          */
         public static final String USER_TOKEN_PREFIX = "user:token:";
 
+        /**
+         * Redis Key 前缀：Token到用户的反向映射
+         * <p>完整格式：token:user:{token}</p>
+         * <p>示例：token:user:a1b2c3d4e5f6789012345678901234ab</p>
+         */
+        public static final String TOKEN_USER_PREFIX = "token:user:";
+
+        /**
+         * Redis Key 前缀：用户登录状态
+         * <p>完整格式：user:login:status:{userUuid}</p>
+         * <p>示例：user:login:status:550e8400-e29b-41d4-a716-446655440000</p>
+         */
+        public static final String USER_LOGIN_STATUS_PREFIX = "user:login:status:";
+
         private Redis() {
             throw new UnsupportedOperationException("Utility class");
         }
