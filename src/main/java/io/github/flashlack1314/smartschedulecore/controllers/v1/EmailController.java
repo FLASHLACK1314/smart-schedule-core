@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailService emailService;
 
+    /**
+     * 发送验证码到指定邮箱
+     *
+     * @param email 收件人邮箱
+     * @return 操作结果
+     */
     @PostMapping("/sendEmail")
     public ResultVO<Void> sendVerificationCode(
             @Valid @RequestParam String email

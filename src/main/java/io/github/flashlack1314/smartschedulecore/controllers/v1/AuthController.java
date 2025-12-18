@@ -23,8 +23,14 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * 用户登录
+     *
+     * @param loginVO 登录信息
+     * @return 操作结果及登录返回数据
+     */
     @PostMapping("/login")
-    public ResultVO<LoginBackDTO> sendVerificationCode(
+    public ResultVO<LoginBackDTO> login(
             @Valid @RequestBody LoginVO loginVO
     ) {
         LoginBackDTO loginBackDTO = authService.login(loginVO);

@@ -18,6 +18,9 @@ spring:
     password:
     host:
     port: 25
+  jackson:
+    # 接收蛇形命名，转换为驼峰
+    property-naming-strategy: SNAKE_CASE
 app:
   database:
     init:
