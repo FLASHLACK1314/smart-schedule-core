@@ -50,7 +50,13 @@ public class AuthServiceLogic implements AuthService {
             throw new BusinessException(ErrorCode.PASSWORD_ERROR);
         }
 
-        // 4. 获取用户角色
+        // 4. 检查用户封禁状态
+        if (Boolean.TRUE.equals(user.getBan())) {
+            log.warn("登录失败: 用户已被封禁, userEmail={}", loginVO.getUserEmail());
+            throw new BusinessException(ErrorCode.USER_DISABLED);
+        }
+
+        // 5. 获取用户角色
         RoleDO role = roleDAO.getById(user.getUserRoleUuid());
         if (role == null) {
             log.warn("登录失败: 用户角色不存在, userUuid={}, userEmail={}",
@@ -58,7 +64,7 @@ public class AuthServiceLogic implements AuthService {
             throw new BusinessException("用户角色不存在", ErrorCode.USER_NOT_FOUND);
         }
 
-        // 5. 生成Token
+        // 6. 生成Token
         String token = TokenUtils.generateToken(user.getUserUuid());
         if (token == null) {
             log.error("登录失败: Token生成失败, userUuid={}, userEmail={}",
@@ -66,7 +72,7 @@ public class AuthServiceLogic implements AuthService {
             throw new BusinessException(ErrorCode.INTERNAL_ERROR);
         }
 
-        // 6. 构建返回数据
+        // 7. 构建返回数据
         LoginBackDTO loginBackDTO = new LoginBackDTO();
         loginBackDTO.setToken(token);
         loginBackDTO.setUserInfo(userService.buildUserInfoDTO(user, role));

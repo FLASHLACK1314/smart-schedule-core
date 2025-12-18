@@ -163,6 +163,7 @@ public class BasicDataInitializationAlgorithm {
                 .setUserPassword(PasswordUtils.encrypt("qwer1234"))
                 .setUserRoleUuid(roleUuid)
                 .setUserSchoolUuid(schoolUuid)
-                .setUserPhoneNum("13800138000");
+                .setUserPhoneNum("13800138000")
+                .setBan(false);
     }
 }

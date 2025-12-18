@@ -11,6 +11,7 @@ CREATE TABLE sc_user (
                          user_email       VARCHAR(64)  NOT NULL,
     user_phone_num VARCHAR(32) NOT NULL,
                          user_password    VARCHAR(255) NOT NULL,
+                         ban BOOLEAN NOT NULL DEFAULT false,
     PRIMARY KEY (user_uuid)
 );
 
@@ -23,6 +24,7 @@ COMMENT ON COLUMN sc_user.user_name IS '用户姓名';
 COMMENT ON COLUMN sc_user.user_email IS '用户邮箱地址';
 COMMENT ON COLUMN sc_user.user_phone_num IS '用户手机号码';
 COMMENT ON COLUMN sc_user.user_password IS '用户密码（加密存储）';
+COMMENT ON COLUMN sc_user.ban IS '用户封禁状态：false-正常，true-封禁';
 
 -- Index for performance
 CREATE INDEX idx_user_school ON sc_user (user_school_uuid);

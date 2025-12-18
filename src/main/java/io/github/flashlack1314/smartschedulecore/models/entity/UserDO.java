@@ -57,4 +57,9 @@ public class UserDO {
      * 用户密码（加密存储）
      */
     private String userPassword;
+
+    /**
+     * 用户封禁状态：false-正常，true-封禁
+     */
+    private Boolean ban;
 }
