@@ -78,4 +78,12 @@ public interface TokenService {
      * @return 在线用户总数
      */
     long getOnlineUserCount();
+
+    /**
+     * 从Authorization头部提取Token
+     *
+     * @param authorization Authorization头部信息
+     * @return Token字符串
+     */
+    String extractToken(String authorization);
 }

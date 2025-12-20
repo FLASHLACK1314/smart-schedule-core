@@ -211,23 +211,6 @@ public class TokenServiceLogic implements TokenService {
             return 0;
         }
     }
-
-    /**
-     * Redis健康检查
-     * 检查Redis连接是否正常
-     *
-     * @return true-连接正常，false-连接异常
-     */
-    public boolean isRedisHealthy() {
-        try {
-            redisTemplate.opsForValue().set("health:check", "OK", 5, TimeUnit.SECONDS);
-            return "OK".equals(redisTemplate.opsForValue().get("health:check"));
-        } catch (Exception e) {
-            log.warn("Redis健康检查失败", e);
-            return false;
-        }
-    }
-
     // === 私有辅助方法 ===
 
     /**
@@ -307,5 +290,18 @@ public class TokenServiceLogic implements TokenService {
             log.debug("验证token失败: userUuid={}, token={}", userUuid, token, e);
             return false;
         }
+    }
+
+    @Override
+    public String extractToken(String authorization) {
+        if (authorization == null || authorization.trim().isEmpty()) {
+            return null;
+        }
+
+        authorization = authorization.trim();
+        if (authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
+        }
+        return authorization;
     }
 }

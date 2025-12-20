@@ -24,9 +24,4 @@ public @interface RequireRole {
      * false: 只需要拥有其中一个角色（默认）
      */
     boolean requireAll() default false;
-
-    /**
-     * 权限不足时的错误消息
-     */
-    String message() default "权限不足";
 }

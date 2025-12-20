@@ -95,7 +95,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
 
             String roleNameEn = roleDO.getRoleNameEn();
-            boolean hasPermission = false;
+            boolean hasPermission;
 
             if (annotation.requireAll()) {
                 // 需要拥有所有指定角色（AND逻辑）
@@ -126,15 +126,23 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     /**
      * 从请求头中获取Token
+     * 支持Bearer格式和直接token格式
      *
      * @param request HTTP请求
      * @return Token字符串
      */
-    private String getTokenFromRequest(@NotNull HttpServletRequest request) {
+    private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (!StringUtils.hasText(bearerToken)) {
+            return null;
+        }
+
+        // 如果是Bearer格式，提取token部分
+        if (bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
+        // 否则直接返回token值
         return bearerToken;
     }
 }

@@ -1,5 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.models.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.github.flashlack1314.smartschedulecore.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,11 +45,13 @@ public class ResultVO<T> {
     /**
      * 详细错误消息（可选）
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String errorMessage;
 
     /**
      * 响应数据
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     // ========== 成功响应方法 ==========
