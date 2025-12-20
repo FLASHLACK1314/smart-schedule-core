@@ -55,12 +55,18 @@ public enum ErrorCode {
     PASSWORD_TOO_WEAK("PasswordTooWeak", 1012, "密码强度不足"),
     RESET_OPERATION_FAILED("ResetOperationFailed", 1013, "密码重置操作失败"),
 
-    // 数据库相关 5100-5199
-    DATABASE_ERROR("DatabaseError", 5100, "数据库操作失败");
+    // 学校相关 2001-2099
+    SCHOOL_NOT_FOUND("SchoolNotFound", 2001, "学校不存在"),
+    SCHOOL_CODE_EXISTS("SchoolCodeExists", 2002, "学校代码已存在"),
+    SCHOOL_NAME_EXISTS("SchoolNameExists", 2003, "学校名称已存在"),
+    SCHOOL_DELETE_FAILED("SchoolDeleteFailed", 2009, "学校删除失败"),
 
-    // 课程相关 2001-2999
+    // 课程相关 2100-2999
 
     // 排课相关 3001-3999
+
+    // 数据库相关 5100-5199
+    DATABASE_ERROR("DatabaseError", 5100, "数据库操作失败");
 
     /**
      * 错误名称
