@@ -7,7 +7,6 @@ import io.github.flashlack1314.smartschedulecore.models.vo.ResetPasswordByCodeVO
 import io.github.flashlack1314.smartschedulecore.models.vo.ResultVO;
 import io.github.flashlack1314.smartschedulecore.services.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class PasswordController {
      * @param changePasswordVO 修改密码请求对象
      * @return 操作结果
      */
-    @PostMapping("/password/change")
+    @PostMapping("/change")
     @RequireRole
     public ResultVO<Void> changePassword(
             @RequestHeader(value = "Authorization") String authorization,
@@ -55,7 +54,7 @@ public class PasswordController {
      * @param adminResetPasswordVO 管理员重置密码请求对象
      * @return 操作结果
      */
-    @PostMapping("/admin/reset-password")
+    @PostMapping("/reset-password")
     @RequireRole("admin")
     public ResultVO<Void> resetUserPassword(
             @RequestHeader(value = "Authorization") String authorization,
@@ -67,19 +66,7 @@ public class PasswordController {
         return ResultVO.success("密码重置成功");
     }
 
-    /**
-     * 发送密码重置验证码
-     * 无需登录，用于忘记密码场景
-     *
-     * @param email 用户邮箱
-     * @return 操作结果
-     */
-    @PostMapping("/password/send-reset-code")
-    public ResultVO<Void> sendPasswordResetCode(
-            @Valid @RequestParam @Email String email) {
-        userService.sendPasswordResetCode(email);
-        return ResultVO.success("验证码发送成功，请查收邮件");
-    }
+
 
     /**
      * 通过验证码重置密码
@@ -88,7 +75,7 @@ public class PasswordController {
      * @param resetPasswordByCodeVO 验证码重置密码请求对象
      * @return 操作结果
      */
-    @PostMapping("/password/reset-by-code")
+    @PostMapping("/reset-by-code")
     public ResultVO<Void> resetPasswordByCode(
             @Valid @RequestBody ResetPasswordByCodeVO resetPasswordByCodeVO) {
         userService.resetPasswordByCodeWithValidation(
