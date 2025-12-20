@@ -84,6 +84,13 @@ public class StringConstant {
          */
         public static final String USER_LOGIN_STATUS_PREFIX = "user:login:status:";
 
+        /**
+         * Redis Key 前缀：密码重置验证码
+         * <p>完整格式：password:reset:{email}</p>
+         * <p>示例：password:reset:user@example.com</p>
+         */
+        public static final String PASSWORD_RESET_PREFIX = "password:reset:";
+
         private Redis() {
             throw new UnsupportedOperationException("Utility class");
         }

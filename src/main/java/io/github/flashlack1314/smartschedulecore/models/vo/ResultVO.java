@@ -2,6 +2,7 @@ package io.github.flashlack1314.smartschedulecore.models.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.github.flashlack1314.smartschedulecore.exceptions.BusinessException;
+import io.github.flashlack1314.smartschedulecore.exceptions.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -187,6 +188,39 @@ public class ResultVO<T> {
         result.setCode(exception.getCode());
         result.setMessage(exception.getMessage());
         result.setErrorMessage(exception.getErrorMessage());
+        return result;
+    }
+
+    /**
+     * 根据ErrorCode创建错误响应
+     * 自动复制ErrorCode的详细信息到响应中
+     *
+     * @param errorCode 错误码枚举
+     * @return 错误响应结果
+     */
+    public static <T> ResultVO<T> error(ErrorCode errorCode) {
+        ResultVO<T> result = new ResultVO<>();
+        result.setOutput(errorCode.getErrorMessage());
+        result.setCode(errorCode.getCode());
+        result.setMessage(errorCode.getErrorMessage());
+        result.setErrorMessage(errorCode.getErrorMessage());
+        return result;
+    }
+
+    /**
+     * 根据ErrorCode创建错误响应（带自定义消息）
+     * 自动复制ErrorCode的详细信息到响应中，但使用自定义message
+     *
+     * @param errorCode     错误码枚举
+     * @param customMessage 自定义响应消息
+     * @return 错误响应结果
+     */
+    public static <T> ResultVO<T> error(ErrorCode errorCode, String customMessage) {
+        ResultVO<T> result = new ResultVO<>();
+        result.setOutput(errorCode.getErrorMessage());
+        result.setCode(errorCode.getCode());
+        result.setMessage(customMessage);
+        result.setErrorMessage(errorCode.getErrorMessage());
         return result;
     }
 

@@ -1,12 +1,18 @@
 package io.github.flashlack1314.smartschedulecore.logic;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.flashlack1314.smartschedulecore.constants.SystemConstant;
+import io.github.flashlack1314.smartschedulecore.daos.RoleDAO;
+import io.github.flashlack1314.smartschedulecore.daos.UserDAO;
 import io.github.flashlack1314.smartschedulecore.exceptions.BusinessException;
 import io.github.flashlack1314.smartschedulecore.exceptions.ErrorCode;
 import io.github.flashlack1314.smartschedulecore.models.dto.UserInfoDTO;
 import io.github.flashlack1314.smartschedulecore.models.entity.RoleDO;
 import io.github.flashlack1314.smartschedulecore.models.entity.UserDO;
+import io.github.flashlack1314.smartschedulecore.services.EmailService;
+import io.github.flashlack1314.smartschedulecore.services.TokenService;
 import io.github.flashlack1314.smartschedulecore.services.UserService;
+import io.github.flashlack1314.smartschedulecore.utils.PasswordUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,8 +31,10 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class UserServiceLogic implements UserService {
 
-    private final io.github.flashlack1314.smartschedulecore.daos.UserDAO userDAO;
-    private final io.github.flashlack1314.smartschedulecore.daos.RoleDAO roleDAO;
+    private final UserDAO userDAO;
+    private final RoleDAO roleDAO;
+    private final EmailService emailService;
+    private final TokenService tokenService;
 
     @Override
     public UserDO getUserByEmail(String userEmail) {
@@ -105,5 +113,205 @@ public class UserServiceLogic implements UserService {
                 .roleName(role.getRoleName())
                 .roleNameEn(role.getRoleNameEn())
                 .build();
+    }
+
+    // ========== 密码管理相关方法实现 ==========
+
+    @Override
+    public void changePassword(String userUuid, String currentPassword, String newPassword) {
+        log.info("开始修改用户密码: userUuid={}", userUuid);
+
+        // 1. 参数验证
+        if (!StringUtils.hasText(userUuid) || !StringUtils.hasText(currentPassword) || !StringUtils.hasText(newPassword)) {
+            throw new BusinessException("参数不能为空", ErrorCode.PARAM_ERROR);
+        }
+
+        // 2. 获取用户信息
+        UserDO user = userDAO.getById(userUuid);
+        if (user == null) {
+            log.warn("用户不存在: userUuid={}", userUuid);
+            throw new BusinessException("用户不存在", ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 3. 验证当前密码
+        if (!PasswordUtils.verify(currentPassword, user.getUserPassword())) {
+            log.warn("当前密码不正确: userUuid={}", userUuid);
+            throw new BusinessException("当前密码不正确", ErrorCode.CURRENT_PASSWORD_INCORRECT);
+        }
+
+        // 4. 加密新密码
+        String encryptedNewPassword = PasswordUtils.encrypt(newPassword);
+
+        // 5. 更新密码
+        boolean updated = userDAO.updateUserPassword(userUuid, encryptedNewPassword);
+        if (!updated) {
+            log.error("密码更新失败: userUuid={}", userUuid);
+            throw new BusinessException("密码更新失败", ErrorCode.RESET_OPERATION_FAILED);
+        }
+
+        // 6. 清理用户所有Token，强制重新登录
+        tokenService.removeAllTokens(userUuid);
+
+        log.info("用户密码修改成功: userUuid={}", userUuid);
+    }
+
+    @Override
+    public void resetUserPassword(String userEmail, String newPassword) {
+        log.info("管理员重置用户密码: userEmail={}", userEmail);
+
+        // 1. 参数验证
+        if (!StringUtils.hasText(userEmail) || !StringUtils.hasText(newPassword)) {
+            throw new BusinessException("参数不能为空", ErrorCode.PARAM_ERROR);
+        }
+
+        // 2. 获取目标用户
+        UserDO targetUser = getUserByEmail(userEmail);
+        if (targetUser == null) {
+            log.warn("目标用户不存在: userEmail={}", userEmail);
+            throw new BusinessException("用户不存在", ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 3. 获取目标用户角色
+        RoleDO targetRole = roleDAO.getById(targetUser.getUserRoleUuid());
+        if (targetRole != null && SystemConstant.Role.getAdminUuid().equals(targetRole.getRoleNameEn())) {
+            log.warn("不能重置管理员密码: userEmail={}", userEmail);
+            throw new BusinessException("不能重置管理员密码", ErrorCode.CANNOT_RESET_ADMIN_PASSWORD);
+        }
+
+        // 4. 加密新密码
+        String encryptedNewPassword = PasswordUtils.encrypt(newPassword);
+
+        // 5. 更新密码
+        boolean updated = userDAO.updateUserPassword(targetUser.getUserUuid(), encryptedNewPassword);
+        if (!updated) {
+            log.error("管理员重置密码失败: userEmail={}", userEmail);
+            throw new BusinessException("密码重置失败", ErrorCode.RESET_OPERATION_FAILED);
+        }
+
+        // 6. 清理目标用户所有Token
+        tokenService.removeAllTokens(targetUser.getUserUuid());
+
+        // 7. 发送密码重置成功通知邮件
+        try {
+            emailService.sendPasswordResetSuccessNotification(userEmail, targetUser.getUserName());
+        } catch (Exception e) {
+            log.error("发送密码重置成功通知邮件失败: userEmail={}", userEmail, e);
+            // 邮件发送失败不影响密码重置操作
+        }
+
+        log.info("管理员重置用户密码成功: userEmail={}", userEmail);
+    }
+
+    @Override
+    public void resetPasswordByCode(String userEmail, String verificationCode, String newPassword) {
+        log.info("通过验证码重置密码: userEmail={}", userEmail);
+
+        // 1. 参数验证
+        if (!StringUtils.hasText(userEmail) || !StringUtils.hasText(verificationCode) || !StringUtils.hasText(newPassword)) {
+            throw new BusinessException("参数不能为空", ErrorCode.PARAM_ERROR);
+        }
+
+        // 2. 验证验证码
+        boolean codeValid = emailService.verifyPasswordResetCode(userEmail, verificationCode);
+        if (!codeValid) {
+            log.warn("密码重置验证码无效或已过期: userEmail={}", userEmail);
+            throw new BusinessException("验证码无效或已过期", ErrorCode.RESET_CODE_INVALID);
+        }
+
+        // 3. 获取用户信息
+        UserDO user = getUserByEmail(userEmail);
+        if (user == null) {
+            log.warn("用户不存在: userEmail={}", userEmail);
+            throw new BusinessException("用户不存在", ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 4. 加密新密码
+        String encryptedNewPassword = PasswordUtils.encrypt(newPassword);
+
+        // 5. 更新密码
+        boolean updated = userDAO.updateUserPassword(user.getUserUuid(), encryptedNewPassword);
+        if (!updated) {
+            log.error("密码重置失败: userEmail={}", userEmail);
+            throw new BusinessException("密码重置失败", ErrorCode.RESET_OPERATION_FAILED);
+        }
+
+        // 6. 清理用户所有Token
+        tokenService.removeAllTokens(user.getUserUuid());
+
+        // 7. 发送密码重置成功通知邮件
+        try {
+            emailService.sendPasswordResetSuccessNotification(userEmail, user.getUserName());
+        } catch (Exception e) {
+            log.error("发送密码重置成功通知邮件失败: userEmail={}", userEmail, e);
+            // 邮件发送失败不影响密码重置操作
+        }
+
+        log.info("通过验证码重置密码成功: userEmail={}", userEmail);
+    }
+
+    @Override
+    public void sendPasswordResetCode(String userEmail) {
+        log.info("发送密码重置验证码: userEmail={}", userEmail);
+
+        // 1. 参数验证
+        if (!StringUtils.hasText(userEmail)) {
+            throw new BusinessException("邮箱不能为空", ErrorCode.PARAM_ERROR);
+        }
+
+        // 2. 检查用户是否存在
+        UserDO user = getUserByEmail(userEmail);
+        if (user == null) {
+            log.warn("用户不存在，不发送验证码: userEmail={}", userEmail);
+            // 为了安全，即使用户不存在也返回成功，避免信息泄露
+            return;
+        }
+
+        // 3. 发送密码重置验证码邮件
+        emailService.sendPasswordResetCode(userEmail);
+
+        log.info("密码重置验证码发送成功: userEmail={}", userEmail);
+    }
+
+    // ========== 基于Token的密码管理方法实现 ==========
+
+    @Override
+    public void changePasswordByToken(String token, String currentPassword, String newPassword, String confirmPassword) {
+        log.info("开始基于Token修改用户密码");
+
+        String userUuid = tokenService.validateAndGetUser(token);
+        if (!StringUtils.hasText(userUuid)) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED.getErrorMessage(), ErrorCode.UNAUTHORIZED);
+        }
+
+        // 2. 密码一致性验证
+        if (!newPassword.equals(confirmPassword)) {
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH.getErrorMessage(), ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        // 3. 调用现有方法
+        changePassword(userUuid, currentPassword, newPassword);
+    }
+
+    @Override
+    public void resetUserPasswordByToken(String token, String userEmail, String newPassword) {
+        log.info("开始基于Token重置用户密码: userEmail={}", userEmail);
+        String adminUuid = tokenService.validateAndGetUser(token);
+        if (!StringUtils.hasText(adminUuid)) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED.getErrorMessage(), ErrorCode.UNAUTHORIZED);
+        }
+
+        // 3. 调用现有方法
+        resetUserPassword(userEmail, newPassword);
+    }
+
+    @Override
+    public void resetPasswordByCodeWithValidation(String userEmail, String verificationCode, String newPassword, String confirmPassword) {
+        log.info("开始通过验证码重置密码: userEmail={}", userEmail);
+        // 1. 密码一致性验证
+        if (!newPassword.equals(confirmPassword)) {
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH.getErrorMessage(), ErrorCode.PASSWORD_MISMATCH);
+        }
+        // 2. 调用现有方法
+        resetPasswordByCode(userEmail, verificationCode, newPassword);
     }
 }

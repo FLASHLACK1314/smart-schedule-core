@@ -1,5 +1,6 @@
 package io.github.flashlack1314.smartschedulecore.controllers.v1;
 
+import io.github.flashlack1314.smartschedulecore.annotation.RequireRole;
 import io.github.flashlack1314.smartschedulecore.models.dto.LoginBackDTO;
 import io.github.flashlack1314.smartschedulecore.models.vo.LoginVO;
 import io.github.flashlack1314.smartschedulecore.models.vo.ResultVO;
@@ -44,6 +45,7 @@ public class AuthController {
      * @return 操作结果
      */
     @PostMapping("/logout")
+    @RequireRole
     public ResultVO<Void> logout(
             @RequestHeader(value = "Authorization", required = false) String authorization
     ) {

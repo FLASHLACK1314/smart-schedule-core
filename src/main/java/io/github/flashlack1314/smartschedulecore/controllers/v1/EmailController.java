@@ -3,6 +3,7 @@ package io.github.flashlack1314.smartschedulecore.controllers.v1;
 import io.github.flashlack1314.smartschedulecore.models.vo.ResultVO;
 import io.github.flashlack1314.smartschedulecore.services.EmailService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class EmailController {
      */
     @PostMapping("/sendEmail")
     public ResultVO<Void> sendVerificationCode(
-            @Valid @RequestParam String email
+            @Valid @RequestParam @Email String email
     ) {
         emailService.sendVerificationCodeHtml(email);
         return ResultVO.success("验证码发送成功");

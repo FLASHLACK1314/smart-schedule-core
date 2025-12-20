@@ -48,6 +48,12 @@ public enum ErrorCode {
     PHONE_ALREADY_EXISTS("PhoneAlreadyExists", 1005, "手机号已存在"),
     USER_ROLE_NOT_FOUND("UserRoleNotFound", 1006, "用户角色不存在"),
     DATA_INCOMPLETE("DataIncomplete", 1007, "数据不完整"),
+    PASSWORD_MISMATCH("PasswordMismatch", 1008, "两次输入的密码不一致"),
+    CURRENT_PASSWORD_INCORRECT("CurrentPasswordIncorrect", 1009, "当前密码不正确"),
+    RESET_CODE_INVALID("ResetCodeInvalid", 1010, "密码重置验证码无效或已过期"),
+    CANNOT_RESET_ADMIN_PASSWORD("CannotResetAdminPassword", 1011, "不能重置管理员密码"),
+    PASSWORD_TOO_WEAK("PasswordTooWeak", 1012, "密码强度不足"),
+    RESET_OPERATION_FAILED("ResetOperationFailed", 1013, "密码重置操作失败"),
 
     // 数据库相关 5100-5199
     DATABASE_ERROR("DatabaseError", 5100, "数据库操作失败");
