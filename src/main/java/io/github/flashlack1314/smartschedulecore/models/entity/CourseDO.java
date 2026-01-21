@@ -3,6 +3,7 @@ package io.github.flashlack1314.smartschedulecore.models.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.github.flashlack1314.smartschedulecore.models.enums.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -56,24 +57,24 @@ public class CourseDO {
     private String departmentUuid;
 
     /**
-     * 课程类别UUID
+     * 课程类别（枚举，替代 course_category_uuid 外键）
      */
-    private String courseCategoryUuid;
+    private CourseCategory category;
 
     /**
-     * 课程属性UUID
+     * 课程属性（枚举，替代 course_property_uuid 外键）
      */
-    private String coursePropertyUuid;
+    private CourseProperty property;
 
     /**
-     * 课程类型UUID
+     * 课程类型（枚举，替代 course_type_uuid 外键）
      */
-    private String courseTypeUuid;
+    private CourseType type;
 
     /**
-     * 课程性质UUID
+     * 课程性质（枚举，替代 course_nature_uuid 外键）
      */
-    private String courseNatureUuid;
+    private CourseNature nature;
 
     /**
      * 总学时
@@ -111,19 +112,19 @@ public class CourseDO {
     private BigDecimal credit;
 
     /**
-     * 理论课教室类型UUID
+     * 理论课教室类型（枚举，替代 theory_classroom_type_uuid 外键）
      */
-    private String theoryClassroomTypeUuid;
+    private ClassroomType theoryClassroomType;
 
     /**
-     * 实验课教室类型UUID
+     * 实验课教室类型（枚举，替代 experiment_classroom_type_uuid 外键）
      */
-    private String experimentClassroomTypeUuid;
+    private ClassroomType experimentClassroomType;
 
     /**
-     * 实践课教室类型UUID
+     * 实践课教室类型（枚举，替代 practice_classroom_type_uuid 外键）
      */
-    private String practiceClassroomTypeUuid;
+    private ClassroomType practiceClassroomType;
 
     /**
      * 是否启用

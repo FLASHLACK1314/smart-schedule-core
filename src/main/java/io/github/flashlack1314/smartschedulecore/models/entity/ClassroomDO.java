@@ -3,6 +3,7 @@ package io.github.flashlack1314.smartschedulecore.models.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.github.flashlack1314.smartschedulecore.models.enums.ClassroomType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -46,9 +47,9 @@ public class ClassroomDO {
     private String buildingUuid;
 
     /**
-     * 教室类型UUID
+     * 教室类型（枚举，替代 classroom_type_uuid 外键）
      */
-    private String classroomTypeUuid;
+    private ClassroomType classroomType;
 
     /**
      * 教室编号（唯一）

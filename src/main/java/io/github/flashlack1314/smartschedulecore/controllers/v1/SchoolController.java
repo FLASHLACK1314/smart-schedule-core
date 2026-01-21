@@ -64,7 +64,7 @@ public class SchoolController {
      * @return 学校详情
      */
     @GetMapping("/{uuid}")
-    public ResultVO<SchoolDTO> getSchool(@PathVariable("uuid") @NotBlank String uuid) {
+    public ResultVO<SchoolDTO> getSchool(@PathVariable @NotBlank String uuid) {
         SchoolDTO school = schoolService.getSchoolByUuid(uuid);
         return ResultVO.success("查询成功", school);
     }
@@ -92,7 +92,7 @@ public class SchoolController {
     @PutMapping("/{uuid}")
     @RequireRole("admin")
     public ResultVO<SchoolDTO> updateSchool(
-            @PathVariable("uuid") @NotBlank String uuid,
+            @PathVariable @NotBlank String uuid,
             @Valid @RequestBody SchoolUpdateVO updateVO) {
         updateVO.setSchoolUuid(uuid);
         SchoolDTO school = schoolService.updateSchool(updateVO);
@@ -107,7 +107,7 @@ public class SchoolController {
      */
     @DeleteMapping("/{uuid}")
     @RequireRole("admin")
-    public ResultVO<Void> deleteSchool(@PathVariable("uuid") @NotBlank String uuid) {
+    public ResultVO<Void> deleteSchool(@PathVariable @NotBlank String uuid) {
         schoolService.deleteSchool(uuid);
         return ResultVO.success("删除成功");
     }

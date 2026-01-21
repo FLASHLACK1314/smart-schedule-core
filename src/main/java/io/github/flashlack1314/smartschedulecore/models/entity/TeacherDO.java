@@ -3,6 +3,7 @@ package io.github.flashlack1314.smartschedulecore.models.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.github.flashlack1314.smartschedulecore.models.enums.TeacherType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -45,9 +46,9 @@ public class TeacherDO {
     private String departmentUuid;
 
     /**
-     * 教师类型UUID
+     * 教师类型（枚举，替代 teacher_type_uuid 外键）
      */
-    private String teacherTypeUuid;
+    private TeacherType teacherType;
 
     /**
      * 工号（唯一）

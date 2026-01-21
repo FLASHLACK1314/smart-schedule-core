@@ -5,7 +5,7 @@ CREATE TABLE sc_classroom
     school_uuid                VARCHAR(32) NOT NULL,
     campus_uuid                VARCHAR(32) NOT NULL,
     building_uuid              VARCHAR(32) NOT NULL,
-    classroom_type_uuid        VARCHAR(32) NOT NULL,
+    classroom_type VARCHAR(32) NOT NULL,
     classroom_number           VARCHAR(32) NOT NULL,
     classroom_name             VARCHAR(64) NOT NULL,
     floor INT NOT NULL DEFAULT 1,
@@ -29,7 +29,7 @@ CREATE UNIQUE INDEX uk_classroom_number ON sc_classroom (classroom_number);
 CREATE INDEX idx_classroom_school ON sc_classroom (school_uuid);
 CREATE INDEX idx_classroom_campus ON sc_classroom (campus_uuid);
 CREATE INDEX idx_classroom_building ON sc_classroom (building_uuid);
-CREATE INDEX idx_classroom_type ON sc_classroom (classroom_type_uuid);
+CREATE INDEX idx_classroom_type ON sc_classroom (classroom_type);
 CREATE INDEX idx_classroom_capacity ON sc_classroom (capacity);
 CREATE INDEX idx_classroom_enabled ON sc_classroom (is_enabled);
 
@@ -39,7 +39,7 @@ COMMENT ON COLUMN sc_classroom.classroom_uuid IS '教室主键';
 COMMENT ON COLUMN sc_classroom.school_uuid IS '关联学校';
 COMMENT ON COLUMN sc_classroom.campus_uuid IS '所属校区';
 COMMENT ON COLUMN sc_classroom.building_uuid IS '所属教学楼';
-COMMENT ON COLUMN sc_classroom.classroom_type_uuid IS '教室类型';
+COMMENT ON COLUMN sc_classroom.classroom_type IS '教室类型（枚举：NORMAL/MULTIMEDIA/LECTURE_HALL/LABORATORY/COMPUTER_ROOM/SMART/MUSIC/ART/SPORTS）';
 COMMENT ON COLUMN sc_classroom.classroom_number IS '教室编号（唯一）';
 COMMENT ON COLUMN sc_classroom.classroom_name IS '教室名称';
 COMMENT ON COLUMN sc_classroom.floor IS '楼层';

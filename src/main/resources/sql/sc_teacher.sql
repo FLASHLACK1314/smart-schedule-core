@@ -5,7 +5,7 @@ CREATE TABLE sc_teacher
     school_uuid       VARCHAR(32) NOT NULL,
     user_uuid         VARCHAR(32),
     department_uuid   VARCHAR(32) NOT NULL,
-    teacher_type_uuid VARCHAR(32) NOT NULL,
+    teacher_type VARCHAR(32) NOT NULL,
     teacher_code         VARCHAR(32) NOT NULL,
     teacher_name         VARCHAR(32) NOT NULL,
     teacher_english_name VARCHAR(128),
@@ -23,7 +23,7 @@ CREATE UNIQUE INDEX uk_teacher_code ON sc_teacher (teacher_code);
 -- 普通索引
 CREATE INDEX idx_teacher_school ON sc_teacher (school_uuid);
 CREATE INDEX idx_teacher_department ON sc_teacher (department_uuid);
-CREATE INDEX idx_teacher_type ON sc_teacher (teacher_type_uuid);
+CREATE INDEX idx_teacher_type ON sc_teacher (teacher_type);
 CREATE INDEX idx_teacher_user ON sc_teacher (user_uuid);
 CREATE INDEX idx_teacher_name ON sc_teacher (teacher_name);
 
@@ -33,7 +33,7 @@ COMMENT ON COLUMN sc_teacher.teacher_uuid IS '教师主键';
 COMMENT ON COLUMN sc_teacher.school_uuid IS '关联学校';
 COMMENT ON COLUMN sc_teacher.user_uuid IS '关联用户账号';
 COMMENT ON COLUMN sc_teacher.department_uuid IS '所属院系';
-COMMENT ON COLUMN sc_teacher.teacher_type_uuid IS '教师类型';
+COMMENT ON COLUMN sc_teacher.teacher_type IS '教师类型（枚举：FULL_TIME/PART_TIME/EXTERNAL/VISITING_PROFESSOR）';
 COMMENT ON COLUMN sc_teacher.teacher_code IS '教师工号（唯一）';
 COMMENT ON COLUMN sc_teacher.teacher_name IS '教师姓名';
 COMMENT ON COLUMN sc_teacher.teacher_english_name IS '教师英文名';
